@@ -1,9 +1,9 @@
 import Foundation
 
 protocol MovieHatService: AnyObject {
-    func addMovie(title: String)
-    func drawRandomMovie() -> Movie?
-    func movieCount() -> Int
+    func addMovie(title: String) async throws
+    func drawRandomMovie() async throws -> Movie?
+    func movieCount() async throws -> Int
 }
 
 final class DefaultMovieHatService: MovieHatService {
@@ -13,23 +13,19 @@ final class DefaultMovieHatService: MovieHatService {
         self.movieRepository = movieRepository
     }
 
-    func addMovie(title: String) {
-        var movies = movieRepository.fetchAll()
+    func addMovie(title: String) async throws {
         let movie = Movie(title: title)
-        movies.append(movie)
-        movieRepository.save(movies)
+        try await movieRepository.insert(movie)
     }
 
-    func drawRandomMovie() -> Movie? {
-        var movies = movieRepository.fetchAll()
-        guard !movies.isEmpty else { return nil }
-        let index = Int.random(in: 0..<movies.count)
-        let drawn = movies.remove(at: index)
-        movieRepository.save(movies)
+    func drawRandomMovie() async throws -> Movie? {
+        let movies = try await movieRepository.fetchAll()
+        guard let drawn = movies.randomElement() else { return nil }
+        try await movieRepository.removeAt(id: drawn.id)
         return drawn
     }
 
-    func movieCount() -> Int {
-        movieRepository.fetchAll().count
+    func movieCount() async throws -> Int {
+        try await movieRepository.fetchAll().count
     }
 }

@@ -28,25 +28,29 @@ final class HomeViewModel {
     }
 
     func viewDidLoad() {
-        refreshCount()
+        Task { await refreshCount() }
     }
 
     func addMovie(title: String) {
         let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
-        movieHatService.addMovie(title: trimmed)
-        drawnMovieTitle = nil
-        refreshCount()
+        Task {
+            try await movieHatService.addMovie(title: trimmed)
+            drawnMovieTitle = nil
+            await refreshCount()
+        }
     }
 
     func drawMovie() {
-        guard let movie = movieHatService.drawRandomMovie() else { return }
-        drawnMovieTitle = movie.title
-        refreshCount()
+        Task {
+            guard let movie = try await movieHatService.drawRandomMovie() else { return }
+            drawnMovieTitle = movie.title
+            await refreshCount()
+        }
     }
 
-    private func refreshCount() {
-        movieCount = movieHatService.movieCount()
+    private func refreshCount() async {
+        movieCount = (try? await movieHatService.movieCount()) ?? 0
     }
 
     private func bind() {
