@@ -8,7 +8,8 @@ final class AppContext {
     let viewControllerFactory: ViewControllerFactory
 
     init() {
-        let dataAccess = DebugDataAccessContainer()
+        let networkClient = URLSessionNetworkClient()
+        let dataAccess = AppDataAccessContainer(networkClient: networkClient)
         let services = ServicesContainer(dataAccess: dataAccess)
         let navigator = AppNavigator()
         let viewModelFactory = ViewModelFactory(services: services, navigator: navigator)

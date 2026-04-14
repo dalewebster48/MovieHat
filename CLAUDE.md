@@ -7,6 +7,10 @@ MovieHat is a family movie night app. Multiple users in a family can share a "ha
 - Single user, all data stored locally in UserDefaults
 - Single home screen where the user can add movies to the hat, see how many are in it, and draw a random movie
 
+## Architecture Notes
+
+- `Networking/` — `NetworkClient` protocol and `URLSessionNetworkClient`. Infrastructure layer created in `AppContext` and passed to `DataAccessContainer`. IMDB-specific endpoints and request types live in their respective repository files.
+
 ## Future Plans
 
 - Multi-user support with shared hats across a family
