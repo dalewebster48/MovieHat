@@ -70,7 +70,7 @@ final class HomeViewController: UIViewController {
         subtitleLabel.textColor = .secondaryLabel
         subtitleLabel.textAlignment = .center
 
-        hatImageView.image = UIImage(named: "hat")
+        hatImageView.image = UIImage(named: "Hat")
         hatImageView.contentMode = .scaleAspectFit
 
         ctaTitleLabel.text = "What's tonight's pick?"
