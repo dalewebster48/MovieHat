@@ -15,5 +15,5 @@ MovieHat is a family movie night app. Multiple users in a family can share a "ha
 ## Build
 
 ```
-xcodebuild -project MovieHat.xcodeproj -scheme MovieHat -destination 'platform=iOS Simulator,name=iPhone 16' -quiet build
+xcodebuild -project MovieHat.xcodeproj -scheme MovieHat -destination 'platform=iOS Simulator,name=iPhone 17' -quiet build
 ```
