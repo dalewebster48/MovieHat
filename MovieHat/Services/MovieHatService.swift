@@ -2,8 +2,8 @@ import Foundation
 
 protocol MovieHatService: AnyObject {
     func addMovie(title: String) async throws
+    func allMovies() async throws -> [Movie]
     func drawRandomMovie() async throws -> Movie?
-    func movieCount() async throws -> Int
 }
 
 final class DefaultMovieHatService: MovieHatService {
@@ -18,14 +18,14 @@ final class DefaultMovieHatService: MovieHatService {
         try await movieRepository.insert(movie)
     }
 
+    func allMovies() async throws -> [Movie] {
+        try await movieRepository.fetchAll()
+    }
+    
     func drawRandomMovie() async throws -> Movie? {
         let movies = try await movieRepository.fetchAll()
         guard let drawn = movies.randomElement() else { return nil }
         try await movieRepository.removeAt(id: drawn.id)
         return drawn
-    }
-
-    func movieCount() async throws -> Int {
-        try await movieRepository.fetchAll().count
     }
 }
