@@ -35,6 +35,10 @@ final class HomeViewModel {
     func viewDidLoad() {
         updateMovies()
     }
+
+    func didTapAddMovie() {
+        navigator.navigate(to: .addMovie)
+    }
     
     func addMovie(title: String) {
         let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)

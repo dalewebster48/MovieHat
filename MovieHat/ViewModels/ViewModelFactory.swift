@@ -12,4 +12,8 @@ final class ViewModelFactory {
     func makeHomeViewModel() -> HomeViewModel {
         HomeViewModel(movieHatService: services.movieHatService, navigator: navigator)
     }
+
+    func makeAddMovieViewModel() -> AddMovieViewModel {
+        AddMovieViewModel(navigator: navigator)
+    }
 }

@@ -90,14 +90,7 @@ final class HomeViewController: UIViewController {
             iconTint: .systemBlue
         )
         addCard.onTap = { [weak self] in
-            let alert = UIAlertController(title: "Add a Movie", message: nil, preferredStyle: .alert)
-            alert.addTextField { $0.placeholder = "Movie title" }
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-            alert.addAction(UIAlertAction(title: "Add", style: .default) { _ in
-                guard let title = alert.textFields?.first?.text else { return }
-                self?.viewModel.addMovie(title: title)
-            })
-            self?.present(alert, animated: true)
+            self?.viewModel.didTapAddMovie()
         }
 
         pullCard.configure(

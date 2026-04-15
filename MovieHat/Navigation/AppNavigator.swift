@@ -18,6 +18,10 @@ final class AppNavigator: Navigator {
         guard let viewControllerFactory, let presentedNavigationController else { return }
 
         switch destination {
+        case .addMovie:
+            let vc = viewControllerFactory.makeAddMovieViewController()
+            vc.modalPresentationStyle = .formSheet
+            presentedNavigationController.present(vc, animated: true)
         }
     }
 
