@@ -35,7 +35,7 @@ final class IMDBMetadataLookupRepository: MetadataLookupRepository {
 // MARK: - IMDB URL Endpoints
 
 private extension URL {
-    static var imdbBase: URL { URL(string: "https://api.imdbapi.dev/v2")! }
+    static var imdbBase: URL { URL(string: "https://api.imdbapi.dev")! }
     static var imdbSearch: URL { imdbBase.appending(path: "search") }
     static var imdbSearchTitles: URL { imdbSearch.appending(path: "titles") }
 }

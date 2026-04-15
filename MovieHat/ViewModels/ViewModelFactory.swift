@@ -14,6 +14,9 @@ final class ViewModelFactory {
     }
 
     func makeAddMovieViewModel() -> AddMovieViewModel {
-        AddMovieViewModel(navigator: navigator)
+        AddMovieViewModel(
+            movieMetadataLookupService: services.movieMetadataLookupService,
+            navigator: navigator
+        )
     }
 }
