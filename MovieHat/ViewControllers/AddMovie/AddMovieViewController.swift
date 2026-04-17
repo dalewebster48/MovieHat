@@ -47,7 +47,7 @@ final class AddMovieViewController: UIViewController {
         searchTextField.rightViewMode = .always
 
         collectionView.register(
-            MovieSearchResultCell.self,
+            UINib(nibName: "MovieSearchResultCell", bundle: nil),
             forCellWithReuseIdentifier: MovieSearchResultCell.reuseIdentifier
         )
         collectionView.dataSource = self

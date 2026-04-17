@@ -31,7 +31,7 @@ final class HomeViewController: UIViewController {
         super.viewDidLoad()
 
         collectionView.register(
-            MoviePosterCell.self,
+            UINib(nibName: "MoviePosterCell", bundle: nil),
             forCellWithReuseIdentifier: MoviePosterCell.reuseIdentifier
         )
         collectionView.dataSource = self
