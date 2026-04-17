@@ -7,7 +7,7 @@ protocol HomeViewModelViewDelegate: AnyObject {
 final class HomeViewModel {
     private let movieHatService: any MovieHatService
     private let navigator: any Navigator
-    private var movies: [Movie] = [] {
+    private(set) var movies: [Movie] = [] {
         didSet {
             bind()
         }
@@ -37,20 +37,11 @@ final class HomeViewModel {
     }
 
     func didTapAddMovie() {
-        navigator.navigate(to: .addMovie)
+        navigator.navigate(to: .addMovie(onDismiss: { [weak self] in
+            self?.updateMovies()
+        }))
     }
     
-    func addMovie(title: String) {
-        let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return }
-        Task {
-            try await movieHatService.addMovie(title: trimmed)
-            drawnMovieTitle = nil
-            
-            updateMovies()
-        }
-    }
-
     func drawMovie() {
         Task {
             guard let movie = try await movieHatService.drawRandomMovie() else { return }

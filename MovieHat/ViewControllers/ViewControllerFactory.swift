@@ -12,8 +12,8 @@ final class ViewControllerFactory {
         return HomeViewController(viewModel: viewModel)
     }
 
-    func makeAddMovieViewController() -> AddMovieViewController {
-        let viewModel = viewModelFactory.makeAddMovieViewModel()
+    func makeAddMovieViewController(onDismiss: @escaping () -> Void) -> AddMovieViewController {
+        let viewModel = viewModelFactory.makeAddMovieViewModel(onDismiss: onDismiss)
         return AddMovieViewController(viewModel: viewModel)
     }
 }

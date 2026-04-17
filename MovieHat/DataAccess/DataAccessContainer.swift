@@ -1,16 +1,19 @@
 import Foundation
 
 protocol DataAccessContainer: AnyObject {
-    var movieRepository: any MovieRepository { get }
-    var metadataLookupRepository: any MetadataLookupRepository { get }
+    var movieHatRepository: any MovieHatRepository { get }
+    var movieSearchRepository: any MovieSearchRepository { get }
 }
 
 final class AppDataAccessContainer: DataAccessContainer {
-    let movieRepository: any MovieRepository
-    let metadataLookupRepository: any MetadataLookupRepository
+    let movieHatRepository: any MovieHatRepository
+    let movieSearchRepository: any MovieSearchRepository
 
-    init(networkClient: any NetworkClient) {
-        self.movieRepository = UserDefaultsMovieRepository()
-        self.metadataLookupRepository = IMDBMetadataLookupRepository(networkClient: networkClient)
+    init(
+        networkClient: any NetworkClient,
+        databaseProvider: DatabaseProvider
+    ) {
+        self.movieHatRepository = SQLiteMovieHatRepository(databaseProvider: databaseProvider)
+        self.movieSearchRepository = IMDBMovieSearchRepository(networkClient: networkClient)
     }
 }

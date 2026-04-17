@@ -74,27 +74,27 @@ final class MovieSearchResultCell: UICollectionViewCell {
         ])
     }
 
-    func configure(with metadata: MovieMetadata) {
-        titleLabel.text = metadata.title
+    func configure(with movie: Movie) {
+        titleLabel.text = movie.title
 
-        if let posterURL = metadata.posterURL {
+        if let posterURL = movie.posterURL {
             posterImageView.load(from: posterURL)
         }
 
         var details: [String] = []
-        if let year = metadata.year {
+        if let year = movie.year {
             details.append(String(year))
         }
-        if let runtime = metadata.runtimeSeconds {
+        if let runtime = movie.runtimeSeconds {
             let minutes = runtime / 60
             details.append("\(minutes) min")
         }
         detailLabel.text = details.joined(separator: " · ")
 
-        genresLabel.text = metadata.genres.isEmpty ? nil : metadata.genres.joined(separator: ", ")
-        genresLabel.isHidden = metadata.genres.isEmpty
+        genresLabel.text = movie.genres.isEmpty ? nil : movie.genres.joined(separator: ", ")
+        genresLabel.isHidden = movie.genres.isEmpty
 
-        if let rating = metadata.aggregateRating {
+        if let rating = movie.aggregateRating {
             ratingLabel.text = "★ \(String(format: "%.1f", rating))"
             ratingLabel.isHidden = false
         } else {

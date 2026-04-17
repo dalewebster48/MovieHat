@@ -195,9 +195,11 @@ extension HomeViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        collectionView.dequeueReusableCell(
+        let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: MoviePosterCell.reuseIdentifier,
             for: indexPath
-        )
+        ) as! MoviePosterCell
+        cell.configure(with: viewModel.movies[indexPath.item])
+        return cell
     }
 }

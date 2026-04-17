@@ -5,7 +5,7 @@ final class AddMovieViewController: UIViewController {
     private enum State {
         case idle
         case searching
-        case results([MovieMetadata])
+        case results([Movie])
         case empty
         case error(String)
     }
@@ -231,5 +231,12 @@ extension AddMovieViewController: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         CGSize(width: collectionView.bounds.width, height: 80)
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        viewModel.didSelectMovie(at: indexPath.item)
     }
 }

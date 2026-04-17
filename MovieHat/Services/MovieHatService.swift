@@ -1,31 +1,30 @@
 import Foundation
 
 protocol MovieHatService: AnyObject {
-    func addMovie(title: String) async throws
+    func addMovie(_ movie: Movie) async throws
     func allMovies() async throws -> [Movie]
     func drawRandomMovie() async throws -> Movie?
 }
 
-final class DefaultMovieHatService: MovieHatService {
-    private let movieRepository: any MovieRepository
+final class MovieHatServiceImpl: MovieHatService {
+    private let movieHatRepository: any MovieHatRepository
 
-    init(movieRepository: any MovieRepository) {
-        self.movieRepository = movieRepository
+    init(movieHatRepository: any MovieHatRepository) {
+        self.movieHatRepository = movieHatRepository
     }
 
-    func addMovie(title: String) async throws {
-        let movie = Movie(title: title)
-        try await movieRepository.insert(movie)
+    func addMovie(_ movie: Movie) async throws {
+        try await movieHatRepository.insert(movie)
     }
 
     func allMovies() async throws -> [Movie] {
-        try await movieRepository.fetchAll()
+        try await movieHatRepository.fetchAll()
     }
-    
+
     func drawRandomMovie() async throws -> Movie? {
-        let movies = try await movieRepository.fetchAll()
+        let movies = try await movieHatRepository.fetchAll()
         guard let drawn = movies.randomElement() else { return nil }
-        try await movieRepository.removeAt(id: drawn.id)
+        try await movieHatRepository.removeAt(id: drawn.id)
         return drawn
     }
 }

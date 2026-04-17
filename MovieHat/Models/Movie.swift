@@ -1,11 +1,12 @@
 import Foundation
 
 struct Movie: Identifiable, Codable {
-    let id: UUID
+    let id: String
     let title: String
-
-    init(id: UUID = UUID(), title: String) {
-        self.id = id
-        self.title = title
-    }
+    let year: Int?
+    let runtimeSeconds: Int?
+    let genres: [String]
+    let plot: String?
+    let aggregateRating: Float?
+    let posterURL: URL?
 }

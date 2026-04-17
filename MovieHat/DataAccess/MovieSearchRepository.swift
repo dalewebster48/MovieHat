@@ -1,24 +1,24 @@
 import Foundation
 
-protocol MetadataLookupRepository: AnyObject {
-    func searchMovies(query: String) async throws -> [MovieMetadata]
+protocol MovieSearchRepository: AnyObject {
+    func searchMovies(query: String) async throws -> [Movie]
 }
 
 // MARK: - IMDB Implementation
 
-final class IMDBMetadataLookupRepository: MetadataLookupRepository {
+final class IMDBMovieSearchRepository: MovieSearchRepository {
     private let networkClient: any NetworkClient
 
     init(networkClient: any NetworkClient) {
         self.networkClient = networkClient
     }
 
-    func searchMovies(query: String) async throws -> [MovieMetadata] {
+    func searchMovies(query: String) async throws -> [Movie] {
         let request = IMDBSearchRequest(query: query, limit: 10)
         let response: IMDBSearchResponse = try await networkClient.get(url: .imdbSearchTitles, query: request)
 
         return response.titles.map { title in
-            MovieMetadata(
+            Movie(
                 id: title.id,
                 title: title.primaryTitle,
                 year: title.startYear,

@@ -9,7 +9,13 @@ final class AppContext {
 
     init() {
         let networkClient = URLSessionNetworkClient()
-        let dataAccess = AppDataAccessContainer(networkClient: networkClient)
+        let databaseProvider = try! DatabaseProvider()
+        try! databaseProvider.migrate()
+
+        let dataAccess = AppDataAccessContainer(
+            networkClient: networkClient,
+            databaseProvider: databaseProvider
+        )
         let services = ServicesContainer(dataAccess: dataAccess)
         let navigator = AppNavigator()
         let viewModelFactory = ViewModelFactory(services: services, navigator: navigator)

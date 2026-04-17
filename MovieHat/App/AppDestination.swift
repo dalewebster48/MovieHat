@@ -1,5 +1,5 @@
 import Foundation
 
 enum AppDestination {
-    case addMovie
+    case addMovie(onDismiss: () -> Void)
 }
