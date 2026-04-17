@@ -75,11 +75,7 @@ final class AddMovieViewModel {
 
     func didSelectMovie(at index: Int) {
         guard index < movies.count else { return }
-        let movie = movies[index]
-        Task {
-            try await movieHatService.addMovie(movie)
-            navigator.dismiss(completion: onDismiss)
-        }
+        navigator.navigate(.push(.movieDetails(movieId: movies[index].id)))
     }
 
     func didTapClose() {

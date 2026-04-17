@@ -18,6 +18,14 @@ MovieHat is a family movie night app. Multiple users in a family can share a "ha
 - `MovieSearchService` / `MovieSearchServiceImpl` — search service layer.
 - `MovieHatService` / `MovieHatServiceImpl` — hat operations (add, list, draw random).
 
+## Navigation
+
+- Navigation uses two enums in `App/AppDestination.swift`: `NavigationRoute` (the destination) and `NavigationAction` (how to get there).
+- `NavigationAction` has `.modal(NavigationRoute)` and `.push(NavigationRoute)` cases, separating "where" from "how".
+- `Navigator` protocol exposes `navigate(_ action: NavigationAction)` and `dismiss(completion:)`.
+- `AppNavigator` handles `.modal` by wrapping the VC in a `UINavigationController`, presenting it, and updating `presentedNavigationController`. Handles `.push` by pushing onto the current `presentedNavigationController`.
+- Route-to-ViewController mapping lives in `AppNavigator.makeViewController(for:)`, which delegates to `ViewControllerFactory`.
+
 ## Future Plans
 
 - Multi-user support with shared hats across a family

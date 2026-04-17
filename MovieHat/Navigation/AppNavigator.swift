@@ -14,14 +14,21 @@ final class AppNavigator: Navigator {
         self.presentedNavigationController = navigationController
     }
 
-    func navigate(to destination: AppDestination) {
-        guard let viewControllerFactory, let presentedNavigationController else { return }
+    func navigate(_ action: NavigationAction) {
+        guard let presentedNavigationController else { return }
 
-        switch destination {
-        case .addMovie(let onDismiss):
-            let vc = viewControllerFactory.makeAddMovieViewController(onDismiss: onDismiss)
-            vc.modalPresentationStyle = .formSheet
-            presentedNavigationController.present(vc, animated: true)
+        switch action {
+        case .modal(let route):
+            let vc = makeViewController(for: route)
+            let nav = UINavigationController(rootViewController: vc)
+            nav.isNavigationBarHidden = true
+            nav.modalPresentationStyle = .formSheet
+            presentedNavigationController.present(nav, animated: true)
+            self.presentedNavigationController = nav
+
+        case .push(let route):
+            let vc = makeViewController(for: route)
+            presentedNavigationController.pushViewController(vc, animated: true)
         }
     }
 
@@ -36,6 +43,20 @@ final class AppNavigator: Navigator {
         presentedNavigationController.dismiss(animated: true) { [weak self] in
             self?.presentedNavigationController = presenting ?? self?.navigationController
             completion?()
+        }
+    }
+
+    private func makeViewController(for route: NavigationRoute) -> UIViewController {
+        guard let viewControllerFactory else {
+            fatalError("ViewControllerFactory not configured on AppNavigator")
+        }
+
+        switch route {
+        case .addMovie(let onDismiss):
+            return viewControllerFactory.makeAddMovieViewController(onDismiss: onDismiss)
+
+        case .movieDetails(let movieId):
+            return viewControllerFactory.makeMovieDetailsViewController(movieId: movieId)
         }
     }
 }

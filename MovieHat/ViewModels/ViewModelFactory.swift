@@ -26,4 +26,11 @@ final class ViewModelFactory {
     func makeMovieSearchResultViewModel(movie: Movie) -> MovieSearchResultViewModel {
         MovieSearchResultViewModel(movie: movie)
     }
+
+    func makeMovieDetailsViewModel(movieId: String) -> MovieDetailsViewModel {
+        MovieDetailsViewModel(
+            movieId: movieId,
+            navigator: navigator
+        )
+    }
 }

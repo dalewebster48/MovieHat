@@ -35,6 +35,7 @@ final class HomeViewController: UIViewController {
             forCellWithReuseIdentifier: MoviePosterCell.reuseIdentifier
         )
         collectionView.dataSource = self
+        collectionView.delegate = self
 
         addCard.configure(
             iconName: "plus",
@@ -82,6 +83,15 @@ extension HomeViewController: HomeViewModelViewDelegate {
         let count = viewModel.movieCount
         movieCountBadge.text = "  \(count) movie\(count == 1 ? "" : "s")  "
         collectionView.reloadData()
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegate {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        viewModel.didSelectMovie(at: indexPath.item)
     }
 }
 

@@ -37,9 +37,14 @@ final class HomeViewModel {
     }
 
     func didTapAddMovie() {
-        navigator.navigate(to: .addMovie(onDismiss: { [weak self] in
+        navigator.navigate(.modal(.addMovie(onDismiss: { [weak self] in
             self?.updateMovies()
-        }))
+        })))
+    }
+
+    func didSelectMovie(at index: Int) {
+        guard index < movies.count else { return }
+        navigator.navigate(.push(.movieDetails(movieId: movies[index].id)))
     }
     
     func drawMovie() {
