@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AddMovieViewController" customModule="MovieHat" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="v00" id="c00"/>
+                <outlet property="closeButton" destination="cb1" id="c01"/>
+                <outlet property="titleLabel" destination="lb1" id="c02"/>
+                <outlet property="searchTextField" destination="tf1" id="c03"/>
+                <outlet property="collectionView" destination="cv1" id="c04"/>
+                <outlet property="activityIndicator" destination="ai1" id="c05"/>
+                <outlet property="statusLabel" destination="lb2" id="c06"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="v00">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="close" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cb1">
+                    <rect key="frame" x="343" y="16" width="30" height="30"/>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add a Movie" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lb1">
+                    <rect key="frame" x="20" y="19" width="120" height="24"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                </label>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search for a movie..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tf1">
+                    <rect key="frame" x="20" y="62" width="353" height="48"/>
+                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="48" id="k01"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="search"/>
+                </textField>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cv1">
+                    <rect key="frame" x="20" y="126" width="353" height="726"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="12" minimumInteritemSpacing="12" id="fl1">
+                        <size key="itemSize" width="353" height="80"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="ai1">
+                    <rect key="frame" x="186" y="150" width="20" height="20"/>
+                </activityIndicatorView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lb2">
+                    <rect key="frame" x="40" y="150" width="313" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" systemColor="secondaryLabelColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="sa1"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="cb1" firstAttribute="top" secondItem="sa1" secondAttribute="top" constant="16" id="k02"/>
+                <constraint firstAttribute="trailing" secondItem="cb1" secondAttribute="trailing" constant="20" id="k03"/>
+                <constraint firstItem="lb1" firstAttribute="centerY" secondItem="cb1" secondAttribute="centerY" id="k04"/>
+                <constraint firstItem="lb1" firstAttribute="leading" secondItem="v00" secondAttribute="leading" constant="20" id="k05"/>
+                <constraint firstItem="tf1" firstAttribute="top" secondItem="cb1" secondAttribute="bottom" constant="16" id="k06"/>
+                <constraint firstItem="tf1" firstAttribute="leading" secondItem="v00" secondAttribute="leading" constant="20" id="k07"/>
+                <constraint firstAttribute="trailing" secondItem="tf1" secondAttribute="trailing" constant="20" id="k08"/>
+                <constraint firstItem="cv1" firstAttribute="top" secondItem="tf1" secondAttribute="bottom" constant="16" id="k09"/>
+                <constraint firstItem="cv1" firstAttribute="leading" secondItem="v00" secondAttribute="leading" constant="20" id="k0A"/>
+                <constraint firstAttribute="trailing" secondItem="cv1" secondAttribute="trailing" constant="20" id="k0B"/>
+                <constraint firstItem="cv1" firstAttribute="bottom" secondItem="v00" secondAttribute="bottom" id="k0C"/>
+                <constraint firstItem="ai1" firstAttribute="centerX" secondItem="cv1" secondAttribute="centerX" id="k0D"/>
+                <constraint firstItem="ai1" firstAttribute="top" secondItem="tf1" secondAttribute="bottom" constant="40" id="k0E"/>
+                <constraint firstItem="lb2" firstAttribute="centerX" secondItem="cv1" secondAttribute="centerX" id="k0F"/>
+                <constraint firstItem="lb2" firstAttribute="top" secondItem="tf1" secondAttribute="bottom" constant="40" id="k0G"/>
+                <constraint firstItem="lb2" firstAttribute="leading" secondItem="v00" secondAttribute="leading" constant="40" id="k0H"/>
+                <constraint firstAttribute="trailing" secondItem="lb2" secondAttribute="trailing" constant="40" id="k0I"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
