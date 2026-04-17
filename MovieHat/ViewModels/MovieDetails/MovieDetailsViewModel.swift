@@ -19,6 +19,9 @@ final class MovieDetailsViewModel {
     private(set) var state: State = .loading {
         didSet { bind() }
     }
+    
+    var showAddToHatButton = false
+    var showRemoveFromHatButton = false
 
     weak var viewDelegate: (any MovieDetailsViewModelViewDelegate)?
 
@@ -41,6 +44,8 @@ final class MovieDetailsViewModel {
     private func loadMovie() {
         Task {
             do {
+                showAddToHatButton = try await movieHatService.containsMovie(id: movie.id) == false
+                showRemoveFromHatButton = !showAddToHatButton
                 let richMovie = try await movieSearchService.getMovie(id: movie.id)
                 state = .loaded(MovieDetailModel(richMovie: richMovie))
             } catch {
@@ -56,10 +61,13 @@ final class MovieDetailsViewModel {
         }
     }
 
-    func didTapClose() {
-        navigator.dismiss(completion: nil)
+    func didTapRemoveFromHat() {
+        Task {
+            try await movieHatService.removeMovieFromHat(id: movie.id)
+            navigator.dismiss(completion: nil)
+        }
     }
-
+    
     private func bind() {
         Task { @MainActor in
             viewDelegate?.bind(viewModel: self)

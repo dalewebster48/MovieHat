@@ -12,9 +12,10 @@ final class MovieDetailsViewController: UIViewController {
     @IBOutlet private weak var writersLabel: UILabel!
     @IBOutlet private weak var starsLabel: UILabel!
     @IBOutlet private weak var addToHatButton: UIButton!
+    @IBOutlet private weak var removeFromHatButton: UIButton!
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet private weak var errorLabel: UILabel!
-    @IBOutlet private weak var closeButton: UIButton!
+    @IBOutlet private weak var posterGradientView: UIView!
 
     private let viewModel: MovieDetailsViewModel
 
@@ -28,18 +29,38 @@ final class MovieDetailsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    private let gradientLayer = CAGradientLayer()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        posterImageView.layer.cornerRadius = 12
+        scrollView.contentInsetAdjustmentBehavior = .never
         addToHatButton.layer.cornerRadius = 12
-        closeButton.addTarget(self, action: #selector(didTapClose), for: .touchUpInside)
         addToHatButton.addTarget(self, action: #selector(didTapAddToHat), for: .touchUpInside)
+        gradientLayer.colors = [UIColor.systemBackground.withAlphaComponent(0).cgColor, UIColor.systemBackground.cgColor]
+        posterGradientView.layer.addSublayer(gradientLayer)
         viewModel.viewDelegate = self
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        gradientLayer.frame = posterGradientView.bounds
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.setNavigationBarHidden(false, animated: animated)
         viewModel.viewWillAppear()
+        
+        applyLoading()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
 
     private func applyLoading() {
@@ -68,6 +89,9 @@ final class MovieDetailsViewController: UIViewController {
         writersLabel.isHidden = model.writers == nil
         starsLabel.text = model.stars
         starsLabel.isHidden = model.stars == nil
+        
+        addToHatButton.isHidden = !viewModel.showAddToHatButton
+        removeFromHatButton.isHidden = !viewModel.showRemoveFromHatButton
     }
 
     private func applyError(_ message: String) {
@@ -77,12 +101,12 @@ final class MovieDetailsViewController: UIViewController {
         errorLabel.text = message
     }
 
-    @objc private func didTapClose() {
-        viewModel.didTapClose()
-    }
-
     @objc private func didTapAddToHat() {
         viewModel.didTapAddToHat()
+    }
+
+    @IBAction func didTapRemoveFomrHat(_ sender: Any) {
+        viewModel.didTapRemoveFromHat()
     }
 }
 
