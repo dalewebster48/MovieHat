@@ -17,8 +17,8 @@ final class ViewControllerFactory {
         return AddMovieViewController(viewModel: viewModel)
     }
 
-    func makeMovieDetailsViewController(movieId: String) -> MovieDetailsViewController {
-        let viewModel = viewModelFactory.makeMovieDetailsViewModel(movieId: movieId)
+    func makeMovieDetailsViewController(movie: Movie) -> MovieDetailsViewController {
+        let viewModel = viewModelFactory.makeMovieDetailsViewModel(movie: movie)
         return MovieDetailsViewController(viewModel: viewModel)
     }
 }

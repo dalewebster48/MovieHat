@@ -5,29 +5,54 @@ protocol MovieDetailsViewModelViewDelegate: AnyObject {
 }
 
 final class MovieDetailsViewModel {
-    private let movieId: String
+    enum State {
+        case loading
+        case loaded(MovieDetailModel)
+        case error(String)
+    }
+
+    private let movie: Movie
     private let movieSearchService: any MovieSearchService
+    private let movieHatService: any MovieHatService
     private let navigator: any Navigator
 
-    private(set) var movie: RichMovie? {
+    private(set) var state: State = .loading {
         didSet { bind() }
     }
 
     weak var viewDelegate: (any MovieDetailsViewModelViewDelegate)?
 
     init(
-        movieId: String,
+        movie: Movie,
         movieSearchService: any MovieSearchService,
+        movieHatService: any MovieHatService,
         navigator: any Navigator
     ) {
-        self.movieId = movieId
+        self.movie = movie
         self.movieSearchService = movieSearchService
+        self.movieHatService = movieHatService
         self.navigator = navigator
     }
 
-    func loadMovie() {
+    func viewWillAppear() {
+        loadMovie()
+    }
+
+    private func loadMovie() {
         Task {
-            movie = try await movieSearchService.getMovie(id: movieId)
+            do {
+                let richMovie = try await movieSearchService.getMovie(id: movie.id)
+                state = .loaded(MovieDetailModel(richMovie: richMovie))
+            } catch {
+                state = .error(error.localizedDescription)
+            }
+        }
+    }
+
+    func didTapAddToHat() {
+        Task {
+            try await movieHatService.addMovie(movie)
+            navigator.dismiss(completion: nil)
         }
     }
 

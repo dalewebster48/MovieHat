@@ -75,7 +75,7 @@ final class AddMovieViewModel {
 
     func didSelectMovie(at index: Int) {
         guard index < movies.count else { return }
-        navigator.navigate(.push(.movieDetails(movieId: movies[index].id)))
+        navigator.navigate(.push(.movieDetails(movie: movies[index])))
     }
 
     func didTapClose() {

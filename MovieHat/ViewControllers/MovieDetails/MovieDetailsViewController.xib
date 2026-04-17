@@ -10,15 +10,163 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MovieDetailsViewController" customModule="MovieHat" customModuleProvider="target">
             <connections>
-                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-5GI"/>
+                <outlet property="view" destination="v00" id="c00"/>
+                <outlet property="scrollView" destination="sv1" id="c01"/>
+                <outlet property="posterImageView" destination="iv1" id="c02"/>
+                <outlet property="titleLabel" destination="lb1" id="c03"/>
+                <outlet property="metadataLabel" destination="lb2" id="c04"/>
+                <outlet property="ratingLabel" destination="lb3" id="c05"/>
+                <outlet property="plotLabel" destination="lb4" id="c06"/>
+                <outlet property="directorsLabel" destination="lb5" id="c07"/>
+                <outlet property="writersLabel" destination="lb6" id="c08"/>
+                <outlet property="starsLabel" destination="lb7" id="c09"/>
+                <outlet property="addToHatButton" destination="bt1" id="c0A"/>
+                <outlet property="activityIndicator" destination="ai1" id="c0B"/>
+                <outlet property="errorLabel" destination="lb8" id="c0C"/>
+                <outlet property="closeButton" destination="cb1" id="c0D"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+        <view contentMode="scaleToFill" id="v00">
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <subviews>
+                <!-- Close Button -->
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cb1">
+                    <rect key="frame" x="337" y="59" width="36" height="36"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="36" id="k50"/>
+                        <constraint firstAttribute="height" constant="36" id="k51"/>
+                    </constraints>
+                    <state key="normal" image="xmark" catalog="system"/>
+                    <color key="tintColor" systemColor="labelColor"/>
+                </button>
+                <!-- Scroll View -->
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sv1">
+                    <rect key="frame" x="0.0" y="95" width="393" height="757"/>
+                    <subviews>
+                        <!-- Content Stack View -->
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="sk1">
+                            <rect key="frame" x="16" y="0.0" width="361" height="900"/>
+                            <subviews>
+                                <!-- Poster Image -->
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="iv1" customClass="RemoteImageView" customModule="MovieHat" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="361" height="541"/>
+                                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" secondItem="iv1" secondAttribute="width" multiplier="3:2" id="k30"/>
+                                    </constraints>
+                                </imageView>
+                                <!-- Title -->
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lb1">
+                                    <rect key="frame" x="0.0" y="557" width="361" height="0.0"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                                </label>
+                                <!-- Metadata -->
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lb2">
+                                    <rect key="frame" x="0.0" y="573" width="361" height="0.0"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" systemColor="secondaryLabelColor"/>
+                                </label>
+                                <!-- Rating -->
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lb3">
+                                    <rect key="frame" x="0.0" y="589" width="361" height="0.0"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                </label>
+                                <!-- Plot -->
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lb4">
+                                    <rect key="frame" x="0.0" y="605" width="361" height="0.0"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                </label>
+                                <!-- Directors -->
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lb5">
+                                    <rect key="frame" x="0.0" y="621" width="361" height="0.0"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <color key="textColor" systemColor="secondaryLabelColor"/>
+                                </label>
+                                <!-- Writers -->
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lb6">
+                                    <rect key="frame" x="0.0" y="637" width="361" height="0.0"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <color key="textColor" systemColor="secondaryLabelColor"/>
+                                </label>
+                                <!-- Stars -->
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lb7">
+                                    <rect key="frame" x="0.0" y="653" width="361" height="0.0"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <color key="textColor" systemColor="secondaryLabelColor"/>
+                                </label>
+                                <!-- Add to Hat Button -->
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bt1">
+                                    <rect key="frame" x="0.0" y="685" width="361" height="50"/>
+                                    <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="50" id="k40"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                    <state key="normal" title="Add to Hat">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                </button>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="sk1" firstAttribute="top" secondItem="sv1" secondAttribute="top" id="k01"/>
+                        <constraint firstItem="sk1" firstAttribute="leading" secondItem="sv1" secondAttribute="leading" constant="16" id="k02"/>
+                        <constraint secondItem="sk1" secondAttribute="trailing" firstItem="sv1" firstAttribute="trailing" constant="16" id="k03"/>
+                        <constraint secondItem="sk1" secondAttribute="bottom" firstItem="sv1" firstAttribute="bottom" constant="24" id="k04"/>
+                        <constraint firstItem="sk1" firstAttribute="width" secondItem="sv1" secondAttribute="width" constant="-32" id="k05"/>
+                    </constraints>
+                </scrollView>
+                <!-- Activity Indicator -->
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="ai1">
+                    <rect key="frame" x="180" y="410" width="33" height="33"/>
+                </activityIndicatorView>
+                <!-- Error Label -->
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lb8" hidden="YES">
+                    <rect key="frame" x="32" y="420" width="329" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" systemColor="secondaryLabelColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="sa1"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <!-- Close button -->
+                <constraint firstItem="cb1" firstAttribute="top" secondItem="sa1" secondAttribute="top" constant="8" id="k10"/>
+                <constraint firstAttribute="trailing" secondItem="cb1" secondAttribute="trailing" constant="20" id="k11"/>
+                <!-- Scroll view -->
+                <constraint firstItem="sv1" firstAttribute="top" secondItem="cb1" secondAttribute="bottom" id="k12"/>
+                <constraint firstItem="sv1" firstAttribute="leading" secondItem="v00" secondAttribute="leading" id="k13"/>
+                <constraint firstAttribute="trailing" secondItem="sv1" secondAttribute="trailing" id="k14"/>
+                <constraint firstItem="sv1" firstAttribute="bottom" secondItem="v00" secondAttribute="bottom" id="k15"/>
+                <!-- Activity indicator -->
+                <constraint firstItem="ai1" firstAttribute="centerX" secondItem="v00" secondAttribute="centerX" id="k16"/>
+                <constraint firstItem="ai1" firstAttribute="centerY" secondItem="v00" secondAttribute="centerY" id="k17"/>
+                <!-- Error label -->
+                <constraint firstItem="lb8" firstAttribute="centerX" secondItem="v00" secondAttribute="centerX" id="k18"/>
+                <constraint firstItem="lb8" firstAttribute="centerY" secondItem="v00" secondAttribute="centerY" id="k19"/>
+                <constraint firstItem="lb8" firstAttribute="leading" secondItem="v00" secondAttribute="leading" constant="32" id="k1A"/>
+                <constraint firstAttribute="trailing" secondItem="lb8" secondAttribute="trailing" constant="32" id="k1B"/>
+            </constraints>
         </view>
     </objects>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>

@@ -55,8 +55,8 @@ final class AppNavigator: Navigator {
         case .addMovie(let onDismiss):
             return viewControllerFactory.makeAddMovieViewController(onDismiss: onDismiss)
 
-        case .movieDetails(let movieId):
-            return viewControllerFactory.makeMovieDetailsViewController(movieId: movieId)
+        case .movieDetails(let movie):
+            return viewControllerFactory.makeMovieDetailsViewController(movie: movie)
         }
     }
 }

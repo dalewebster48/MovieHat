@@ -2,7 +2,7 @@ import Foundation
 
 enum NavigationRoute {
     case addMovie(onDismiss: () -> Void)
-    case movieDetails(movieId: String)
+    case movieDetails(movie: Movie)
 }
 
 enum NavigationAction {
