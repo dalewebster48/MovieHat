@@ -9,8 +9,9 @@ final class HomeViewController: UIViewController {
     @IBOutlet private weak var hatImageView: UIImageView!
     @IBOutlet private weak var ctaTitleLabel: UILabel!
     @IBOutlet private weak var ctaSubtitleLabel: UILabel!
-    @IBOutlet private weak var addCard: ActionCardView!
+    @IBOutlet private weak var genreCard: ActionCardView!
     @IBOutlet private weak var pullCard: ActionCardView!
+    @IBOutlet private weak var searchButton: UIButton!
     @IBOutlet private weak var hatSectionIcon: UIImageView!
     @IBOutlet private weak var hatSectionTitle: UILabel!
     @IBOutlet private weak var movieCountBadge: UILabel!
@@ -37,16 +38,18 @@ final class HomeViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
 
-        addCard.configure(
-            iconName: "plus",
-            title: "Add a Movie",
-            subtitle: "Drop a movie\nin the hat",
-            cardBackgroundColor: UIColor.systemBlue.withAlphaComponent(0.08),
-            iconTint: .systemBlue
+        searchButton.setImage(
+            UIImage(systemName: "magnifyingglass"),
+            for: .normal
         )
-        addCard.onTap = { [weak self] in
-            self?.viewModel.didTapAddMovie()
-        }
+
+        genreCard.configure(
+            iconName: "theatermasks",
+            title: "Pick a Genre",
+            subtitle: "Choose a genre,\nthen draw",
+            cardBackgroundColor: UIColor.systemPurple.withAlphaComponent(0.08),
+            iconTint: .systemPurple
+        )
 
         pullCard.configure(
             iconName: "wand.and.stars",
@@ -75,6 +78,10 @@ final class HomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    @IBAction func didTapSearch(_ sender: Any) {
+        viewModel.didTapSearch()
     }
 }
 

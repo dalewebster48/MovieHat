@@ -36,7 +36,7 @@ final class HomeViewModel {
         updateMovies()
     }
 
-    func didTapAddMovie() {
+    func didTapSearch() {
         navigator.navigate(.modal(.addMovie(onDismiss: { [weak self] in
             self?.updateMovies()
         })))
