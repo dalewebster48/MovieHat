@@ -19,11 +19,33 @@ final class DatabaseProvider: Sendable {
             t.column(MoviesTable.title)
             t.column(MoviesTable.year)
             t.column(MoviesTable.runtimeSeconds)
-            t.column(MoviesTable.genres)
             t.column(MoviesTable.plot)
             t.column(MoviesTable.aggregateRating)
             t.column(MoviesTable.posterURL)
         })
+
+        try db.run(GenresTable.table.create(ifNotExists: true) { t in
+            t.column(GenresTable.id, primaryKey: .autoincrement)
+            t.column(GenresTable.name, unique: true)
+        })
+
+        try db.run(MovieGenresTable.table.create(ifNotExists: true) { t in
+            t.column(MovieGenresTable.movieId)
+            t.column(MovieGenresTable.genreId)
+            t.primaryKey(MovieGenresTable.movieId, MovieGenresTable.genreId)
+            t.foreignKey(
+                MovieGenresTable.movieId,
+                references: MoviesTable.table, MoviesTable.id,
+                delete: .cascade
+            )
+            t.foreignKey(
+                MovieGenresTable.genreId,
+                references: GenresTable.table, GenresTable.id,
+                delete: .cascade
+            )
+        })
+
+        try db.run("PRAGMA foreign_keys = ON")
     }
 }
 
@@ -33,8 +55,19 @@ enum MoviesTable {
     static let title = SQLite.Expression<String>("title")
     static let year = SQLite.Expression<Int?>("year")
     static let runtimeSeconds = SQLite.Expression<Int?>("runtimeSeconds")
-    static let genres = SQLite.Expression<String>("genres")
     static let plot = SQLite.Expression<String?>("plot")
     static let aggregateRating = SQLite.Expression<Double?>("aggregateRating")
     static let posterURL = SQLite.Expression<String?>("posterURL")
+}
+
+enum GenresTable {
+    static let table = Table("genres")
+    static let id = SQLite.Expression<Int64>("id")
+    static let name = SQLite.Expression<String>("name")
+}
+
+enum MovieGenresTable {
+    static let table = Table("movie_genres")
+    static let movieId = SQLite.Expression<String>("movieId")
+    static let genreId = SQLite.Expression<Int64>("genreId")
 }
