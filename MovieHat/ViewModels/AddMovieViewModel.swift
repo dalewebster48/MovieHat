@@ -8,13 +8,18 @@ final class AddMovieViewModel {
     private let movieSearchService: any MovieSearchService
     private let movieHatService: any MovieHatService
     private let navigator: any Navigator
+    private let viewModelFactory: ViewModelFactory
     private let onDismiss: () -> Void
     private var searchTask: Task<Void, Never>?
 
     weak var viewDelegate: (any AddMovieViewModelViewDelegate)?
 
-    private(set) var searchResults: [Movie] = [] {
+    private var movies: [Movie] = [] {
         didSet { bind() }
+    }
+
+    var searchResults: [MovieSearchResultViewModel] {
+        movies.map { viewModelFactory.makeMovieSearchResultViewModel(movie: $0) }
     }
 
     private(set) var isSearching: Bool = false {
@@ -29,11 +34,13 @@ final class AddMovieViewModel {
         movieSearchService: any MovieSearchService,
         movieHatService: any MovieHatService,
         navigator: any Navigator,
+        viewModelFactory: ViewModelFactory,
         onDismiss: @escaping () -> Void
     ) {
         self.movieSearchService = movieSearchService
         self.movieHatService = movieHatService
         self.navigator = navigator
+        self.viewModelFactory = viewModelFactory
         self.onDismiss = onDismiss
     }
 
@@ -43,7 +50,7 @@ final class AddMovieViewModel {
 
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
-            searchResults = []
+            movies = []
             isSearching = false
             return
         }
@@ -54,7 +61,7 @@ final class AddMovieViewModel {
                 try await Task.sleep(nanoseconds: 1_000_000_000)
                 let results = try await movieSearchService.searchMovies(query: trimmed)
                 guard !Task.isCancelled else { return }
-                searchResults = results
+                movies = results
                 isSearching = false
             } catch is CancellationError {
                 // Debounce cancelled — next task takes over
@@ -67,8 +74,8 @@ final class AddMovieViewModel {
     }
 
     func didSelectMovie(at index: Int) {
-        guard index < searchResults.count else { return }
-        let movie = searchResults[index]
+        guard index < movies.count else { return }
+        let movie = movies[index]
         Task {
             try await movieHatService.addMovie(movie)
             navigator.dismiss(completion: onDismiss)

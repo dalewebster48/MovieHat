@@ -10,8 +10,19 @@
 		2DA00001300000000000000A /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 2DA00002300000000000000A /* SQLite */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		2DB00001400000000000000A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2D963BB12F89AFA300C4B368 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2D963BB82F89AFA300C4B368;
+			remoteInfo = MovieHat;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		2D963BB92F89AFA300C4B368 /* MovieHat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieHat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DB00002400000000000000A /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -33,6 +44,11 @@
 			path = MovieHat;
 			sourceTree = "<group>";
 		};
+		2DB00003400000000000000A /* Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Tests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +60,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2DB00004400000000000000A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -51,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				2D963BBB2F89AFA300C4B368 /* MovieHat */,
+				2DB00003400000000000000A /* Tests */,
 				2D963BBA2F89AFA300C4B368 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				2D963BB92F89AFA300C4B368 /* MovieHat.app */,
+				2DB00002400000000000000A /* Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -89,6 +114,27 @@
 			productReference = 2D963BB92F89AFA300C4B368 /* MovieHat.app */;
 			productType = "com.apple.product-type.application";
 		};
+		2DB00005400000000000000A /* Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2DB00006400000000000000A /* Build configuration list for PBXNativeTarget "Tests" */;
+			buildPhases = (
+				2DB00007400000000000000A /* Sources */,
+				2DB00004400000000000000A /* Frameworks */,
+				2DB00008400000000000000A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2DB00009400000000000000A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				2DB00003400000000000000A /* Tests */,
+			);
+			name = Tests;
+			productName = Tests;
+			productReference = 2DB00002400000000000000A /* Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -101,6 +147,10 @@
 				TargetAttributes = {
 					2D963BB82F89AFA300C4B368 = {
 						CreatedOnToolsVersion = 26.4;
+					};
+					2DB00005400000000000000A = {
+						CreatedOnToolsVersion = 26.4;
+						TestTargetID = 2D963BB82F89AFA300C4B368;
 					};
 				};
 			};
@@ -122,12 +172,20 @@
 			projectRoot = "";
 			targets = (
 				2D963BB82F89AFA300C4B368 /* MovieHat */,
+				2DB00005400000000000000A /* Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		2D963BB72F89AFA300C4B368 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2DB00008400000000000000A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -144,7 +202,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2DB00007400000000000000A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2DB00009400000000000000A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2D963BB82F89AFA300C4B368 /* MovieHat */;
+			targetProxy = 2DB00001400000000000000A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		2D963BCD2F89AFA400C4B368 /* Debug */ = {
@@ -330,6 +403,48 @@
 			};
 			name = Release;
 		};
+		2DB0000A400000000000000A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TXS69XU8F2;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dalewebster.MovieHatTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MovieHat.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MovieHat";
+			};
+			name = Debug;
+		};
+		2DB0000B400000000000000A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TXS69XU8F2;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dalewebster.MovieHatTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MovieHat.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MovieHat";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -347,6 +462,15 @@
 			buildConfigurations = (
 				2D963BCD2F89AFA400C4B368 /* Debug */,
 				2D963BCE2F89AFA400C4B368 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2DB00006400000000000000A /* Build configuration list for PBXNativeTarget "Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2DB0000A400000000000000A /* Debug */,
+				2DB0000B400000000000000A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

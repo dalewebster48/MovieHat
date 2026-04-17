@@ -18,7 +18,12 @@ final class ViewModelFactory {
             movieSearchService: services.movieSearchService,
             movieHatService: services.movieHatService,
             navigator: navigator,
+            viewModelFactory: self,
             onDismiss: onDismiss
         )
+    }
+
+    func makeMovieSearchResultViewModel(movie: Movie) -> MovieSearchResultViewModel {
+        MovieSearchResultViewModel(movie: movie)
     }
 }

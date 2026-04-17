@@ -5,7 +5,7 @@ final class AddMovieViewController: UIViewController {
     private enum State {
         case idle
         case searching
-        case results([Movie])
+        case results([MovieSearchResultViewModel])
         case empty
         case error(String)
     }

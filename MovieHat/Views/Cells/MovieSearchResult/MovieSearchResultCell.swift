@@ -15,31 +15,16 @@ final class MovieSearchResultCell: UICollectionViewCell {
         posterImageView.layer.cornerRadius = 8
     }
 
-    func configure(with movie: Movie) {
-        titleLabel.text = movie.title
+    func configure(with viewModel: MovieSearchResultViewModel) {
+        titleLabel.text = viewModel.title
+        detailLabel.text = viewModel.detail
+        genresLabel.text = viewModel.genres
+        genresLabel.isHidden = viewModel.genres == nil
+        ratingLabel.text = viewModel.rating
+        ratingLabel.isHidden = viewModel.rating == nil
 
-        if let posterURL = movie.posterURL {
+        if let posterURL = viewModel.posterURL {
             posterImageView.load(from: posterURL)
-        }
-
-        var details: [String] = []
-        if let year = movie.year {
-            details.append(String(year))
-        }
-        if let runtime = movie.runtimeSeconds {
-            let minutes = runtime / 60
-            details.append("\(minutes) min")
-        }
-        detailLabel.text = details.joined(separator: " · ")
-
-        genresLabel.text = movie.genres.isEmpty ? nil : movie.genres.joined(separator: ", ")
-        genresLabel.isHidden = movie.genres.isEmpty
-
-        if let rating = movie.aggregateRating {
-            ratingLabel.text = "★ \(String(format: "%.1f", rating))"
-            ratingLabel.isHidden = false
-        } else {
-            ratingLabel.isHidden = true
         }
     }
 
