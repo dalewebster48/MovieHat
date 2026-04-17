@@ -30,6 +30,7 @@ final class ViewModelFactory {
     func makeMovieDetailsViewModel(movieId: String) -> MovieDetailsViewModel {
         MovieDetailsViewModel(
             movieId: movieId,
+            movieSearchService: services.movieSearchService,
             navigator: navigator
         )
     }

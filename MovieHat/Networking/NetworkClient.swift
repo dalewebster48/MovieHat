@@ -2,6 +2,7 @@ import Foundation
 
 protocol NetworkClient: AnyObject {
     func get<Request: Encodable, Response: Decodable>(url: URL, query: Request) async throws -> Response
+    func get<Response: Decodable>(url: URL) async throws -> Response
 }
 
 final class URLSessionNetworkClient: NetworkClient {
@@ -15,10 +16,8 @@ final class URLSessionNetworkClient: NetworkClient {
         self.encoder = JSONEncoder()
     }
 
-    func get<Request: Encodable, Response: Decodable>(url: URL, query: Request) async throws -> Response {
-        let finalURL = try appendQueryItems(to: url, from: query)
-
-        let (data, response) = try await session.data(from: finalURL)
+    func get<Response: Decodable>(url: URL) async throws -> Response {
+        let (data, response) = try await session.data(from: url)
 
         guard let httpResponse = response as? HTTPURLResponse else {
             throw NetworkError.invalidResponse
@@ -29,6 +28,11 @@ final class URLSessionNetworkClient: NetworkClient {
         }
 
         return try decoder.decode(Response.self, from: data)
+    }
+
+    func get<Request: Encodable, Response: Decodable>(url: URL, query: Request) async throws -> Response {
+        let finalURL = try appendQueryItems(to: url, from: query)
+        return try await get(url: finalURL)
     }
 
     private func appendQueryItems(to url: URL, from encodable: some Encodable) throws -> URL {
