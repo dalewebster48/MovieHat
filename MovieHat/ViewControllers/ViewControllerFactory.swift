@@ -17,6 +17,11 @@ final class ViewControllerFactory {
         return AddMovieViewController(viewModel: viewModel)
     }
 
+    func makeGenrePickerViewController() -> GenrePickerViewController {
+        let viewModel = viewModelFactory.makeGenrePickerViewModel()
+        return GenrePickerViewController(viewModel: viewModel)
+    }
+
     func makeMovieDetailsViewController(movie: Movie) -> MovieDetailsViewController {
         let viewModel = viewModelFactory.makeMovieDetailsViewModel(movie: movie)
         return MovieDetailsViewController(viewModel: viewModel)

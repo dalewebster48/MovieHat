@@ -27,6 +27,13 @@ final class ViewModelFactory {
         MovieSearchResultViewModel(movie: movie)
     }
 
+    func makeGenrePickerViewModel() -> GenrePickerViewModel {
+        GenrePickerViewModel(
+            genreService: services.genreService,
+            navigator: navigator
+        )
+    }
+
     func makeMovieDetailsViewModel(movie: Movie) -> MovieDetailsViewModel {
         MovieDetailsViewModel(
             movie: movie,

@@ -47,7 +47,7 @@ final class HomeViewModel {
         navigator.navigate(.push(.movieDetails(movie: movies[index])))
     }
     
-    func drawMovie() {
+    func didTapDrawMovie() {
         Task {
             guard let movie = try await movieHatService.drawRandomMovie() else { return }
             drawnMovieTitle = movie.title
@@ -56,6 +56,10 @@ final class HomeViewModel {
         }
     }
 
+    func didTapPickGenre() {
+        navigator.navigate(.bottomSheet(.genrePicker))
+    }
+    
     private func updateMovies() {
         Task {
             do {

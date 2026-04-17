@@ -29,6 +29,15 @@ final class AppNavigator: Navigator {
         case .push(let route):
             let vc = makeViewController(for: route)
             presentedNavigationController.pushViewController(vc, animated: true)
+
+        case .bottomSheet(let route):
+            let vc = makeViewController(for: route)
+            vc.modalPresentationStyle = .pageSheet
+            if let sheet = vc.sheetPresentationController {
+                sheet.detents = [.medium()]
+                sheet.prefersGrabberVisible = true
+            }
+            presentedNavigationController.present(vc, animated: true)
         }
     }
 
@@ -57,6 +66,9 @@ final class AppNavigator: Navigator {
 
         case .movieDetails(let movie):
             return viewControllerFactory.makeMovieDetailsViewController(movie: movie)
+
+        case .genrePicker:
+            return viewControllerFactory.makeGenrePickerViewController()
         }
     }
 }

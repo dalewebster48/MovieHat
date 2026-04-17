@@ -59,7 +59,10 @@ final class HomeViewController: UIViewController {
             iconTint: .systemOrange
         )
         pullCard.onTap = { [weak self] in
-            self?.viewModel.drawMovie()
+            self?.viewModel.didTapDrawMovie()
+        }
+        genreCard.onTap = { [weak self] in
+            self?.viewModel.didTapPickGenre()
         }
 
         subtitleLabel.font = .preferredFont(forTextStyle: .subheadline)
