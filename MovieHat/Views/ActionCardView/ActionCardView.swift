@@ -4,6 +4,12 @@ final class ActionCardView: UIView {
 
     var onTap: (() -> Void)?
 
+    var isDisabled: Bool = false {
+        didSet {
+            applyDisabledState()
+        }
+    }
+
     @IBOutlet private weak var iconCircle: UIView!
     @IBOutlet private weak var iconImageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
@@ -51,6 +57,11 @@ final class ActionCardView: UIView {
     }
 
     @objc private func didTap() {
+        guard !isDisabled else { return }
         onTap?()
+    }
+
+    private func applyDisabledState() {
+        alpha = isDisabled ? 0.4 : 1.0
     }
 }

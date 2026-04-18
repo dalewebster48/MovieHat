@@ -1,4 +1,5 @@
 # Bugs
+- Genres just not working
 - Currently no filtering for movies / other types of media
 - Ugly gray square when loading images
 

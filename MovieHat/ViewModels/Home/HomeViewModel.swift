@@ -24,6 +24,18 @@ final class HomeViewModel {
         let count = movies.count
         return "  \(count) movie\(count == 1 ? "" : "s")  "
     }
+
+    var isDrawDisabled: Bool {
+        movies.isEmpty
+    }
+
+    var isGenreDisabled: Bool {
+        movies.isEmpty
+    }
+
+    var emptyStateMessage: String? {
+        movies.isEmpty ? "No movies in the hat yet.\nTap the search icon to add some!" : nil
+    }
     
     init(movieHatService: any MovieHatService, navigator: any Navigator) {
         self.movieHatService = movieHatService

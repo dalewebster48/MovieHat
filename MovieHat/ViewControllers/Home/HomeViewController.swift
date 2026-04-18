@@ -95,6 +95,21 @@ final class HomeViewController: UIViewController {
 extension HomeViewController: HomeViewModelViewDelegate {
     func bind(viewModel: HomeViewModel) {
         movieCountBadge.text = viewModel.movieCountBadgeLabel
+        pullCard.isDisabled = viewModel.isDrawDisabled
+        genreCard.isDisabled = viewModel.isGenreDisabled
+
+        if let message = viewModel.emptyStateMessage {
+            let label = UILabel()
+            label.text = message
+            label.textAlignment = .center
+            label.numberOfLines = 0
+            label.font = .preferredFont(forTextStyle: .subheadline)
+            label.textColor = .secondaryLabel
+            collectionView.backgroundView = label
+        } else {
+            collectionView.backgroundView = nil
+        }
+
         collectionView.reloadData()
     }
 
