@@ -81,6 +81,8 @@ final class HomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        
+        print("Dale home will appear")
     }
 
     @IBAction func didTapSearch(_ sender: Any) {
@@ -90,8 +92,7 @@ final class HomeViewController: UIViewController {
 
 extension HomeViewController: HomeViewModelViewDelegate {
     func bind(viewModel: HomeViewModel) {
-        let count = viewModel.movieCount
-        movieCountBadge.text = "  \(count) movie\(count == 1 ? "" : "s")  "
+        movieCountBadge.text = viewModel.movieCountBadgeLabel
         collectionView.reloadData()
     }
 }
@@ -110,7 +111,7 @@ extension HomeViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        viewModel.movieCount
+        viewModel.movies.count
     }
 
     func collectionView(

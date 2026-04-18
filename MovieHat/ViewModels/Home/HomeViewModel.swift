@@ -22,14 +22,17 @@ final class HomeViewModel {
     private(set) var drawnMovieTitle: String? = nil {
         didSet { bind() }
     }
-
-    var movieCount: Int {
-        movies.count
+    
+    var movieCountBadgeLabel: String {
+        let count = movies.count
+        return "  \(count) movie\(count == 1 ? "" : "s")  "
     }
     
     init(movieHatService: any MovieHatService, navigator: any Navigator) {
         self.movieHatService = movieHatService
         self.navigator = navigator
+        
+        self.movieHatService.addConsumer(self)
     }
 
     func viewDidLoad() {
@@ -37,9 +40,7 @@ final class HomeViewModel {
     }
 
     func didTapSearch() {
-        navigator.navigate(.modal(.addMovie(onDismiss: { [weak self] in
-            self?.updateMovies()
-        })))
+        navigator.navigate(.modal(.addMovie))
     }
 
     func didSelectMovie(at index: Int) {
@@ -74,5 +75,15 @@ final class HomeViewModel {
         Task { @MainActor in
             viewDelegate?.bind(viewModel: self)
         }
+    }
+}
+
+extension HomeViewModel: MovieHatServiceConsumer {
+    func movieWasAddedToHat(movieHatService: any MovieHatService, id: String) {
+        updateMovies()
+    }
+    
+    func movieWasRemovedFromHat(movieHatService: any MovieHatService, id: String) {
+        updateMovies()
     }
 }

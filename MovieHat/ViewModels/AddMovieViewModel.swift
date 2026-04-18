@@ -9,7 +9,6 @@ final class AddMovieViewModel {
     private let movieHatService: any MovieHatService
     private let navigator: any Navigator
     private let viewModelFactory: ViewModelFactory
-    private let onDismiss: () -> Void
     private var searchTask: Task<Void, Never>?
 
     weak var viewDelegate: (any AddMovieViewModelViewDelegate)?
@@ -34,14 +33,12 @@ final class AddMovieViewModel {
         movieSearchService: any MovieSearchService,
         movieHatService: any MovieHatService,
         navigator: any Navigator,
-        viewModelFactory: ViewModelFactory,
-        onDismiss: @escaping () -> Void
+        viewModelFactory: ViewModelFactory
     ) {
         self.movieSearchService = movieSearchService
         self.movieHatService = movieHatService
         self.navigator = navigator
         self.viewModelFactory = viewModelFactory
-        self.onDismiss = onDismiss
     }
 
     func searchQueryChanged(_ query: String) {
@@ -79,7 +76,7 @@ final class AddMovieViewModel {
     }
 
     func didTapClose() {
-        navigator.dismiss(completion: onDismiss)
+        navigator.dismiss()
     }
 
     private func bind() {

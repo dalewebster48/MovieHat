@@ -33,7 +33,7 @@ final class GenrePickerViewModel {
     }
 
     func didTapClose() {
-        navigator.dismiss(completion: nil)
+        navigator.dismiss()
     }
 
     private func bind() {

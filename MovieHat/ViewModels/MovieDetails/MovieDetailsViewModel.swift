@@ -59,14 +59,14 @@ final class MovieDetailsViewModel {
         guard let movie else { return }
         Task {
             try await movieHatService.addMovie(movie)
-            navigator.dismiss(completion: nil)
+            navigator.dismiss()
         }
     }
 
     func didTapRemoveFromHat() {
         Task {
             try await movieHatService.removeMovieFromHat(id: movieId)
-            navigator.dismiss(completion: nil)
+            navigator.dismiss()
         }
     }
     

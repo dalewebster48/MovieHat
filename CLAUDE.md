@@ -12,8 +12,9 @@ MovieHat is a family movie night app. Multiple users in a family can share a "ha
 
 - `Networking/` — `NetworkClient` protocol and `URLSessionNetworkClient`. Infrastructure layer created in `AppContext` and passed to `DataAccessContainer`. IMDB-specific endpoints and request types live in their respective repository files.
 - `DataAccess/DatabaseProvider.swift` — Owns the SQLite connection (via SQLite.swift SPM package), creates the database file, and runs schema migrations.
-- `Movie` is the single domain model (consolidated from the former `Movie` and `MovieMetadata` types). Contains IMDB id, title, year, runtime, genres, plot, rating, and poster URL.
-- `MovieSearchRepository` / `IMDBMovieSearchRepository` — searches IMDB API, returns `[Movie]`.
+- `MovieSearchResult` — lightweight model for search results (id, title, year, rating, poster URL).
+- `Movie` — full domain model with all IMDB detail fields. Stored in the hat database.
+- `MovieSearchRepository` / `IMDBMovieSearchRepository` — searches IMDB API, returns `[MovieSearchResult]`; fetches full movie by ID, returns `Movie`.
 - `MovieHatRepository` / `SQLiteMovieHatRepository` — persists hat movies in SQLite.
 - `MovieSearchService` / `MovieSearchServiceImpl` — search service layer.
 - `MovieHatService` / `MovieHatServiceImpl` — hat operations (add, list, draw random).

@@ -6,9 +6,22 @@ protocol MovieHatService: AnyObject {
     func drawRandomMovie() async throws -> Movie?
     func containsMovie(id: String) async throws -> Bool
     func removeMovieFromHat(id: String) async throws
+    
+    func addConsumer(_ consumer: MovieHatServiceConsumer)
+    func removeConsumer(_ consumer: MovieHatServiceConsumer)
+}
+
+protocol MovieHatServiceConsumer: AnyObject {
+    func movieWasAddedToHat(movieHatService: MovieHatService, id: String)
+    func movieWasRemovedFromHat(movieHatService: MovieHatService, id: String)
 }
 
 final class MovieHatServiceImpl: MovieHatService {
+    private var _consumers: NSHashTable<AnyObject> = .weakObjects()
+    private var consumers: [any MovieHatServiceConsumer] {
+        _consumers.allObjects.compactMap { $0 as? MovieHatServiceConsumer }
+    }
+    
     private let movieHatRepository: any MovieHatRepository
 
     init(movieHatRepository: any MovieHatRepository) {
@@ -17,6 +30,8 @@ final class MovieHatServiceImpl: MovieHatService {
 
     func addMovie(_ movie: Movie) async throws {
         try await movieHatRepository.insert(movie)
+        
+        consumers.forEach({ $0.movieWasAddedToHat(movieHatService: self, id: movie.id) })
     }
 
     func allMovies() async throws -> [Movie] {
@@ -27,6 +42,9 @@ final class MovieHatServiceImpl: MovieHatService {
         let movies = try await movieHatRepository.fetchAll()
         guard let drawn = movies.randomElement() else { return nil }
         try await movieHatRepository.removeAt(id: drawn.id)
+        
+        consumers.forEach({ $0.movieWasRemovedFromHat(movieHatService: self, id: drawn.id) })
+        
         return drawn
     }
     
@@ -37,5 +55,17 @@ final class MovieHatServiceImpl: MovieHatService {
     
     func removeMovieFromHat(id: String) async throws {
         try await movieHatRepository.removeAt(id: id)
+        
+        consumers.forEach({ $0.movieWasRemovedFromHat(movieHatService: self, id: id) })
+    }
+}
+
+extension MovieHatServiceImpl {
+    func addConsumer(_ consumer: any MovieHatServiceConsumer) {
+        _consumers.add(consumer)
+    }
+    
+    func removeConsumer(_ consumer: any MovieHatServiceConsumer) {
+        _consumers.remove(consumer)
     }
 }

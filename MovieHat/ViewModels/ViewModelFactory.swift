@@ -13,13 +13,12 @@ final class ViewModelFactory {
         HomeViewModel(movieHatService: services.movieHatService, navigator: navigator)
     }
 
-    func makeAddMovieViewModel(onDismiss: @escaping () -> Void) -> AddMovieViewModel {
+    func makeAddMovieViewModel() -> AddMovieViewModel {
         AddMovieViewModel(
             movieSearchService: services.movieSearchService,
             movieHatService: services.movieHatService,
             navigator: navigator,
-            viewModelFactory: self,
-            onDismiss: onDismiss
+            viewModelFactory: self
         )
     }
 

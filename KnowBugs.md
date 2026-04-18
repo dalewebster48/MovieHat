@@ -6,9 +6,11 @@
 - AddMovie dismiss cross is weird
 - AddMboie search results should have an empty state
 - Currently no filtering for movies / other types of media
+- Ugly gray square when loading images
 
 # Missing features
 
+- Adding movie straight from search results
 - Draw from hat animation / controller transition
 - Share drawn movie on instagram
 - 'Put back in hat'

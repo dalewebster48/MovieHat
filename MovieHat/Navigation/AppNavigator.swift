@@ -41,9 +41,8 @@ final class AppNavigator: Navigator {
         }
     }
 
-    func dismiss(completion: (() -> Void)? = nil) {
+    func dismiss() {
         guard let presentedNavigationController else {
-            completion?()
             return
         }
 
@@ -51,7 +50,6 @@ final class AppNavigator: Navigator {
 
         presentedNavigationController.dismiss(animated: true) { [weak self] in
             self?.presentedNavigationController = presenting ?? self?.navigationController
-            completion?()
         }
     }
 
@@ -61,8 +59,8 @@ final class AppNavigator: Navigator {
         }
 
         switch route {
-        case .addMovie(let onDismiss):
-            return viewControllerFactory.makeAddMovieViewController(onDismiss: onDismiss)
+        case .addMovie:
+            return viewControllerFactory.makeAddMovieViewController()
 
         case .movieDetails(let movieId):
             return viewControllerFactory.makeMovieDetailsViewController(movieId: movieId)

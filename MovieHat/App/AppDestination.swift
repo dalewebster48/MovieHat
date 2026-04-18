@@ -1,7 +1,7 @@
 import Foundation
 
 enum NavigationRoute {
-    case addMovie(onDismiss: () -> Void)
+    case addMovie
     case movieDetails(movieId: String)
     case genrePicker
 }
