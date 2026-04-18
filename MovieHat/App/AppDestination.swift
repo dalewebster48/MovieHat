@@ -3,7 +3,7 @@ import UIKit
 enum NavigationRoute {
     case addMovie
     case movieDetails(movieId: String)
-    case genrePicker
+    case genrePicker(onGenreSelected: (String) -> Void)
     case seeAllHat
 }
 
@@ -11,5 +11,5 @@ enum NavigationAction {
     case modal(NavigationRoute)
     case push(NavigationRoute)
     case bottomSheet(NavigationRoute)
-    case presentHat(hatSourceFrame: CGRect, hatImage: UIImage?)
+    case presentHat(hatSourceFrame: CGRect, hatImage: UIImage?, genre: String? = nil)
 }

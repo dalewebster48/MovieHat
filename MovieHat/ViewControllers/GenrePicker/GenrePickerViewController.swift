@@ -30,6 +30,9 @@ extension GenrePickerViewController: GenrePickerViewModelViewDelegate {
 
         for genre in viewModel.genres {
             let button = makeGenreButton(title: genre)
+            button.addAction(UIAction { [weak self] _ in
+                self?.viewModel.didSelectGenre(genre)
+            }, for: .touchUpInside)
             stackView.addArrangedSubview(button)
         }
     }

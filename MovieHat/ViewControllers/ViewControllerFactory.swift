@@ -17,8 +17,12 @@ final class ViewControllerFactory {
         return AddMovieViewController(viewModel: viewModel)
     }
 
-    func makeGenrePickerViewController() -> GenrePickerViewController {
-        let viewModel = viewModelFactory.makeGenrePickerViewModel()
+    func makeGenrePickerViewController(
+        onGenreSelected: @escaping (String) -> Void
+    ) -> GenrePickerViewController {
+        let viewModel = viewModelFactory.makeGenrePickerViewModel(
+            onGenreSelected: onGenreSelected
+        )
         return GenrePickerViewController(viewModel: viewModel)
     }
 
@@ -34,9 +38,10 @@ final class ViewControllerFactory {
 
     func makeDrawMovieViewController(
         hatSourceFrame: CGRect,
-        hatImage: UIImage?
+        hatImage: UIImage?,
+        genre: String? = nil
     ) -> DrawMovieViewController {
-        let viewModel = viewModelFactory.makeDrawMovieViewModel()
+        let viewModel = viewModelFactory.makeDrawMovieViewModel(genre: genre)
         return DrawMovieViewController(
             viewModel: viewModel,
             hatSourceFrame: hatSourceFrame,

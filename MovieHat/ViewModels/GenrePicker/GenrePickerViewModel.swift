@@ -7,6 +7,7 @@ protocol GenrePickerViewModelViewDelegate: AnyObject {
 final class GenrePickerViewModel {
     private let genreService: any GenreService
     private let navigator: any Navigator
+    private let onGenreSelected: (String) -> Void
 
     private(set) var genres: [String] = [] {
         didSet { bind() }
@@ -16,10 +17,12 @@ final class GenrePickerViewModel {
 
     init(
         genreService: any GenreService,
-        navigator: any Navigator
+        navigator: any Navigator,
+        onGenreSelected: @escaping (String) -> Void
     ) {
         self.genreService = genreService
         self.navigator = navigator
+        self.onGenreSelected = onGenreSelected
     }
 
     func viewDidLoad() {
@@ -32,8 +35,14 @@ final class GenrePickerViewModel {
         }
     }
 
+    func didSelectGenre(_ genre: String) {
+        navigator.dismiss { [onGenreSelected] in
+            onGenreSelected(genre)
+        }
+    }
+
     func didTapClose() {
-        navigator.dismiss()
+        navigator.dismiss(completion: nil)
     }
 
     private func bind() {

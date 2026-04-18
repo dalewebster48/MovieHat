@@ -41,13 +41,14 @@ final class AppNavigator: NSObject, Navigator, UIAdaptivePresentationControllerD
             vc.presentationController?.delegate = self
             presentedNavigationController.present(vc, animated: true)
 
-        case .presentHat(let hatSourceFrame, let hatImage):
+        case .presentHat(let hatSourceFrame, let hatImage, let genre):
             guard let viewControllerFactory else {
                 fatalError("ViewControllerFactory not configured on AppNavigator")
             }
             let vc = viewControllerFactory.makeDrawMovieViewController(
                 hatSourceFrame: hatSourceFrame,
-                hatImage: hatImage
+                hatImage: hatImage,
+                genre: genre
             )
             presentedNavigationController.present(vc, animated: true)
         }
@@ -58,7 +59,7 @@ final class AppNavigator: NSObject, Navigator, UIAdaptivePresentationControllerD
         self.presentedNavigationController = presenting ?? navigationController
     }
 
-    func dismiss() {
+    func dismiss(completion: (() -> Void)? = nil) {
         guard let presentedNavigationController else {
             return
         }
@@ -67,6 +68,7 @@ final class AppNavigator: NSObject, Navigator, UIAdaptivePresentationControllerD
 
         presentedNavigationController.dismiss(animated: true) { [weak self] in
             self?.presentedNavigationController = presenting ?? self?.navigationController
+            completion?()
         }
     }
 
@@ -82,8 +84,10 @@ final class AppNavigator: NSObject, Navigator, UIAdaptivePresentationControllerD
         case .movieDetails(let movieId):
             return viewControllerFactory.makeMovieDetailsViewController(movieId: movieId)
 
-        case .genrePicker:
-            return viewControllerFactory.makeGenrePickerViewController()
+        case .genrePicker(let onGenreSelected):
+            return viewControllerFactory.makeGenrePickerViewController(
+                onGenreSelected: onGenreSelected
+            )
 
         case .seeAllHat:
             return viewControllerFactory.makeSeeAllHatViewController()

@@ -66,7 +66,14 @@ final class HomeViewModel {
     }
 
     func didTapPickGenre() {
-        navigator.navigate(.bottomSheet(.genrePicker))
+        navigator.navigate(.bottomSheet(.genrePicker(onGenreSelected: { [weak self] genre in
+            guard let self, let hatInfo = viewDelegate?.hatImageInfo() else { return }
+            navigator.navigate(.presentHat(
+                hatSourceFrame: hatInfo.frame,
+                hatImage: hatInfo.image,
+                genre: genre
+            ))
+        })))
     }
 
     func didTapSeeAll() {

@@ -3,7 +3,7 @@ import Foundation
 protocol MovieHatService: AnyObject {
     func addMovie(_ movie: Movie) async throws
     func allMovies() async throws -> [Movie]
-    func drawRandomMovie() async throws -> Movie?
+    func drawRandomMovie(genre: String?) async throws -> Movie?
     func containsMovie(id: String) async throws -> Bool
     func removeMovieFromHat(id: String) async throws
     
@@ -38,8 +38,11 @@ final class MovieHatServiceImpl: MovieHatService {
         try await movieHatRepository.fetchAll()
     }
 
-    func drawRandomMovie() async throws -> Movie? {
-        let movies = try await movieHatRepository.fetchAll()
+    func drawRandomMovie(genre: String? = nil) async throws -> Movie? {
+        var movies = try await movieHatRepository.fetchAll()
+        if let genre {
+            movies = movies.filter { $0.genres.contains(genre) }
+        }
         return movies.randomElement()
     }
     

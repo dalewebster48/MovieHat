@@ -17,6 +17,7 @@ protocol DrawMovieViewModelProtocol: AnyObject {
 final class DrawMovieViewModel: DrawMovieViewModelProtocol {
     private let movieHatService: any MovieHatService
     private let navigator: any Navigator
+    private let genre: String?
 
     weak var viewDelegate: (any DrawMovieViewModelViewDelegate)?
 
@@ -26,10 +27,12 @@ final class DrawMovieViewModel: DrawMovieViewModelProtocol {
 
     init(
         movieHatService: any MovieHatService,
-        navigator: any Navigator
+        navigator: any Navigator,
+        genre: String? = nil
     ) {
         self.movieHatService = movieHatService
         self.navigator = navigator
+        self.genre = genre
     }
 
     func viewDidAppear() {
@@ -57,7 +60,7 @@ final class DrawMovieViewModel: DrawMovieViewModelProtocol {
     private func drawMovie() {
         Task {
             do {
-                let movie = try await movieHatService.drawRandomMovie()
+                let movie = try await movieHatService.drawRandomMovie(genre: genre)
                 await MainActor.run {
                     drawnMovie = movie
                 }

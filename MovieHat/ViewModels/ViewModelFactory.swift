@@ -26,10 +26,13 @@ final class ViewModelFactory {
         MovieSearchResultViewModel(movie: movie)
     }
 
-    func makeGenrePickerViewModel() -> GenrePickerViewModel {
+    func makeGenrePickerViewModel(
+        onGenreSelected: @escaping (String) -> Void
+    ) -> GenrePickerViewModel {
         GenrePickerViewModel(
             genreService: services.genreService,
-            navigator: navigator
+            navigator: navigator,
+            onGenreSelected: onGenreSelected
         )
     }
 
@@ -49,10 +52,11 @@ final class ViewModelFactory {
         )
     }
 
-    func makeDrawMovieViewModel() -> DrawMovieViewModel {
+    func makeDrawMovieViewModel(genre: String? = nil) -> DrawMovieViewModel {
         DrawMovieViewModel(
             movieHatService: services.movieHatService,
-            navigator: navigator
+            navigator: navigator,
+            genre: genre
         )
     }
 }
