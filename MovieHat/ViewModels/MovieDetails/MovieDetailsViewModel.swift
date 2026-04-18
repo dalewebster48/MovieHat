@@ -11,27 +11,28 @@ final class MovieDetailsViewModel {
         case error(String)
     }
 
-    private let movie: Movie
+    private let movieId: String
     private let movieSearchService: any MovieSearchService
     private let movieHatService: any MovieHatService
     private let navigator: any Navigator
+    private var movie: Movie?
 
     private(set) var state: State = .loading {
         didSet { bind() }
     }
-    
+
     var showAddToHatButton = false
     var showRemoveFromHatButton = false
 
     weak var viewDelegate: (any MovieDetailsViewModelViewDelegate)?
 
     init(
-        movie: Movie,
+        movieId: String,
         movieSearchService: any MovieSearchService,
         movieHatService: any MovieHatService,
         navigator: any Navigator
     ) {
-        self.movie = movie
+        self.movieId = movieId
         self.movieSearchService = movieSearchService
         self.movieHatService = movieHatService
         self.navigator = navigator
@@ -44,10 +45,10 @@ final class MovieDetailsViewModel {
     private func loadMovie() {
         Task {
             do {
-                showAddToHatButton = try await movieHatService.containsMovie(id: movie.id) == false
+                showAddToHatButton = try await movieHatService.containsMovie(id: movieId) == false
                 showRemoveFromHatButton = !showAddToHatButton
-                let richMovie = try await movieSearchService.getMovie(id: movie.id)
-                state = .loaded(MovieDetailModel(richMovie: richMovie))
+                self.movie = try await movieSearchService.getMovie(id: movieId)
+                state = .loaded(MovieDetailModel(movie: movie!))
             } catch {
                 state = .error(error.localizedDescription)
             }
@@ -55,6 +56,7 @@ final class MovieDetailsViewModel {
     }
 
     func didTapAddToHat() {
+        guard let movie else { return }
         Task {
             try await movieHatService.addMovie(movie)
             navigator.dismiss(completion: nil)
@@ -63,7 +65,7 @@ final class MovieDetailsViewModel {
 
     func didTapRemoveFromHat() {
         Task {
-            try await movieHatService.removeMovieFromHat(id: movie.id)
+            try await movieHatService.removeMovieFromHat(id: movieId)
             navigator.dismiss(completion: nil)
         }
     }
