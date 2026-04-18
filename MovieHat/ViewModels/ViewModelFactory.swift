@@ -41,4 +41,11 @@ final class ViewModelFactory {
             navigator: navigator
         )
     }
+
+    func makeDrawMovieViewModel() -> DrawMovieViewModel {
+        DrawMovieViewModel(
+            movieHatService: services.movieHatService,
+            navigator: navigator
+        )
+    }
 }

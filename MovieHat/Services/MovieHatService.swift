@@ -40,12 +40,7 @@ final class MovieHatServiceImpl: MovieHatService {
 
     func drawRandomMovie() async throws -> Movie? {
         let movies = try await movieHatRepository.fetchAll()
-        guard let drawn = movies.randomElement() else { return nil }
-        try await movieHatRepository.removeAt(id: drawn.id)
-        
-        consumers.forEach({ $0.movieWasRemovedFromHat(movieHatService: self, id: drawn.id) })
-        
-        return drawn
+        return movies.randomElement()
     }
     
     func containsMovie(id: String) async throws -> Bool {

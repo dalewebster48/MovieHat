@@ -81,8 +81,10 @@ final class HomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
-        
-        print("Dale home will appear")
+    }
+
+    func setHatVisible(_ visible: Bool) {
+        hatImageView.alpha = visible ? 1 : 0
     }
 
     @IBAction func didTapSearch(_ sender: Any) {
@@ -94,6 +96,11 @@ extension HomeViewController: HomeViewModelViewDelegate {
     func bind(viewModel: HomeViewModel) {
         movieCountBadge.text = viewModel.movieCountBadgeLabel
         collectionView.reloadData()
+    }
+
+    func hatImageInfo() -> (frame: CGRect, image: UIImage?) {
+        let frameInWindow = hatImageView.convert(hatImageView.bounds, to: nil)
+        return (frameInWindow, hatImageView.image)
     }
 }
 

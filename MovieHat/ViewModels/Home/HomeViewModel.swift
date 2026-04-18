@@ -1,7 +1,8 @@
-import Foundation
+import UIKit
 
 protocol HomeViewModelViewDelegate: AnyObject {
     func bind(viewModel: HomeViewModel)
+    func hatImageInfo() -> (frame: CGRect, image: UIImage?)
 }
 
 final class HomeViewModel {
@@ -16,10 +17,6 @@ final class HomeViewModel {
     weak var viewDelegate: (any HomeViewModelViewDelegate)?
 
     private(set) var title: String = "Movie Hat" {
-        didSet { bind() }
-    }
-    
-    private(set) var drawnMovieTitle: String? = nil {
         didSet { bind() }
     }
     
@@ -49,12 +46,11 @@ final class HomeViewModel {
     }
     
     func didTapDrawMovie() {
-        Task {
-            guard let movie = try await movieHatService.drawRandomMovie() else { return }
-            drawnMovieTitle = movie.title
-            
-            updateMovies()
-        }
+        guard let hatInfo = viewDelegate?.hatImageInfo() else { return }
+        navigator.navigate(.presentHat(
+            hatSourceFrame: hatInfo.frame,
+            hatImage: hatInfo.image
+        ))
     }
 
     func didTapPickGenre() {

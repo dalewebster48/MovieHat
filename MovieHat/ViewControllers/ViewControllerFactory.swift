@@ -26,4 +26,16 @@ final class ViewControllerFactory {
         let viewModel = viewModelFactory.makeMovieDetailsViewModel(movieId: movieId)
         return MovieDetailsViewController(viewModel: viewModel)
     }
+
+    func makeDrawMovieViewController(
+        hatSourceFrame: CGRect,
+        hatImage: UIImage?
+    ) -> DrawMovieViewController {
+        let viewModel = viewModelFactory.makeDrawMovieViewModel()
+        return DrawMovieViewController(
+            viewModel: viewModel,
+            hatSourceFrame: hatSourceFrame,
+            hatImage: hatImage
+        )
+    }
 }

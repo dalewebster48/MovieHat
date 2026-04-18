@@ -40,6 +40,16 @@ final class AppNavigator: NSObject, Navigator, UIAdaptivePresentationControllerD
             }
             vc.presentationController?.delegate = self
             presentedNavigationController.present(vc, animated: true)
+
+        case .presentHat(let hatSourceFrame, let hatImage):
+            guard let viewControllerFactory else {
+                fatalError("ViewControllerFactory not configured on AppNavigator")
+            }
+            let vc = viewControllerFactory.makeDrawMovieViewController(
+                hatSourceFrame: hatSourceFrame,
+                hatImage: hatImage
+            )
+            presentedNavigationController.present(vc, animated: true)
         }
     }
 

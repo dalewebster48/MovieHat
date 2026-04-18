@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 enum NavigationRoute {
     case addMovie
@@ -10,4 +10,5 @@ enum NavigationAction {
     case modal(NavigationRoute)
     case push(NavigationRoute)
     case bottomSheet(NavigationRoute)
+    case presentHat(hatSourceFrame: CGRect, hatImage: UIImage?)
 }
