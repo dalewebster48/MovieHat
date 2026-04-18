@@ -120,6 +120,9 @@
                                                     <rect key="frame" x="304" y="10" width="49" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <state key="normal" title="See All"/>
+                                                    <connections>
+                                                        <action selector="didTapSeeAll:" destination="-1" eventType="touchUpInside" id="bt1a"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                         </stackView>

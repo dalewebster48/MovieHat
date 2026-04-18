@@ -90,6 +90,10 @@ final class HomeViewController: UIViewController {
     @IBAction func didTapSearch(_ sender: Any) {
         viewModel.didTapSearch()
     }
+
+    @IBAction func didTapSeeAll(_ sender: Any) {
+        viewModel.didTapSeeAll()
+    }
 }
 
 extension HomeViewController: HomeViewModelViewDelegate {

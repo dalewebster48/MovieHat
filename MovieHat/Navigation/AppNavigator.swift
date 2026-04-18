@@ -84,6 +84,9 @@ final class AppNavigator: NSObject, Navigator, UIAdaptivePresentationControllerD
 
         case .genrePicker:
             return viewControllerFactory.makeGenrePickerViewController()
+
+        case .seeAllHat:
+            return viewControllerFactory.makeSeeAllHatViewController()
         }
     }
 }

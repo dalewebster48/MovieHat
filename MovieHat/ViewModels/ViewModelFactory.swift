@@ -42,6 +42,13 @@ final class ViewModelFactory {
         )
     }
 
+    func makeSeeAllHatViewModel() -> SeeAllHatViewModel {
+        SeeAllHatViewModel(
+            movieHatService: services.movieHatService,
+            navigator: navigator
+        )
+    }
+
     func makeDrawMovieViewModel() -> DrawMovieViewModel {
         DrawMovieViewModel(
             movieHatService: services.movieHatService,

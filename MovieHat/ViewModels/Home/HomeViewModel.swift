@@ -68,6 +68,10 @@ final class HomeViewModel {
     func didTapPickGenre() {
         navigator.navigate(.bottomSheet(.genrePicker))
     }
+
+    func didTapSeeAll() {
+        navigator.navigate(.push(.seeAllHat))
+    }
     
     private func updateMovies() {
         Task {

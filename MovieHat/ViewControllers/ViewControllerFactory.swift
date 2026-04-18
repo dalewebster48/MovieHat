@@ -27,6 +27,11 @@ final class ViewControllerFactory {
         return MovieDetailsViewController(viewModel: viewModel)
     }
 
+    func makeSeeAllHatViewController() -> SeeAllHatViewController {
+        let viewModel = viewModelFactory.makeSeeAllHatViewModel()
+        return SeeAllHatViewController(viewModel: viewModel)
+    }
+
     func makeDrawMovieViewController(
         hatSourceFrame: CGRect,
         hatImage: UIImage?

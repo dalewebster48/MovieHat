@@ -4,6 +4,7 @@ enum NavigationRoute {
     case addMovie
     case movieDetails(movieId: String)
     case genrePicker
+    case seeAllHat
 }
 
 enum NavigationAction {
