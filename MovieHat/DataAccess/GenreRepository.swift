@@ -30,21 +30,16 @@ final class SQLiteGenreRepository: GenreRepository {
         try await removeGenresForMovie(id: id)
 
         for genre in genres {
-            let genreId = try db.run(GenresTable.table.insert(
+            try db.run(GenresTable.table.insert(
                 or: .ignore,
                 GenresTable.name <- genre
             ))
 
-            let resolvedId: Int64
-            if genreId > 0 {
-                resolvedId = genreId
-            } else {
-                let query = GenresTable.table
-                    .filter(GenresTable.name == genre)
-                    .select(GenresTable.id)
-                guard let row = try db.pluck(query) else { continue }
-                resolvedId = row[GenresTable.id]
-            }
+            let query = GenresTable.table
+                .filter(GenresTable.name == genre)
+                .select(GenresTable.id)
+            guard let row = try db.pluck(query) else { continue }
+            let resolvedId = row[GenresTable.id]
 
             try db.run(MovieGenresTable.table.insert(
                 or: .ignore,
@@ -60,13 +55,15 @@ final class SQLiteGenreRepository: GenreRepository {
     }
 
     func allGenresInHat() async throws -> [String] {
-        let query = GenresTable.table
-            .join(MovieGenresTable.table, on: GenresTable.id == MovieGenresTable.genreId)
-            .select(distinct: GenresTable.name)
-            .order(GenresTable.name)
+        let sql = """
+            SELECT DISTINCT genres.name
+            FROM movie_genres
+            INNER JOIN genres ON movie_genres.genreId = genres.id
+            ORDER BY genres.name
+            """
 
-        return try db.prepare(query).map { row in
-            row[GenresTable.name]
+        return try db.prepare(sql).compactMap { row in
+            row[0] as? String
         }
     }
 }

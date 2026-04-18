@@ -65,10 +65,16 @@ final class MovieDetailsViewModel: MovieDetailViewModelProtocol {
         case .loading, .error: return
         case .loaded:
             Task {
-                if isCtaDestructive {
-                    try? await movieHatService.removeMovieFromHat(id: movieId)
-                } else {
-                    try? await movieHatService.addMovie(movie!)
+                do {
+                    if isCtaDestructive {
+                        // Remove movie from hat
+                        try await movieHatService.removeMovieFromHat(id: movieId)
+                    } else {
+                        // Add movie to hat
+                        try await movieHatService.addMovie(movie!)
+                    }
+                } catch {
+                    print("Error adding movie to hat", error.localizedDescription)
                 }
             }
         }
