@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D5C7F952F93A521009A96CB /* KnowBugs.md in Sources */ = {isa = PBXBuildFile; fileRef = 2D5C7F942F93A519009A96CB /* KnowBugs.md */; };
 		2DA00001300000000000000A /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 2DA00002300000000000000A /* SQLite */; };
 /* End PBXBuildFile section */
 
@@ -21,6 +22,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2D5C7F942F93A519009A96CB /* KnowBugs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = KnowBugs.md; sourceTree = "<group>"; };
 		2D963BB92F89AFA300C4B368 /* MovieHat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieHat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DB00002400000000000000A /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -73,6 +75,7 @@
 		2D963BB02F89AFA300C4B368 = {
 			isa = PBXGroup;
 			children = (
+				2D5C7F942F93A519009A96CB /* KnowBugs.md */,
 				2D963BBB2F89AFA300C4B368 /* MovieHat */,
 				2DB00003400000000000000A /* Tests */,
 				2D963BBA2F89AFA300C4B368 /* Products */,
@@ -199,6 +202,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D5C7F952F93A521009A96CB /* KnowBugs.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
