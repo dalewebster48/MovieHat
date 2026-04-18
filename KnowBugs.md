@@ -1,5 +1,4 @@
 # Bugs
-- AddMboie search results should have an empty state
 - Currently no filtering for movies / other types of media
 - Ugly gray square when loading images
 
@@ -13,9 +12,11 @@
 - View everything in hat page
 
 # Code Health
+- Create a color palette for consistent themeing
 - View model and state machine implementation is broken
 
 # Fixed
+- AddMboie search results should have an empty state
 - Home screen does not refresh when dismissing presented controllers
 - The 'in hat' state does not update when tapping buttons in movie details view
 - Navigation sometimes breaks

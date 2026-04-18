@@ -11,6 +11,7 @@ protocol DrawMovieViewModelProtocol: AnyObject {
     func viewDidAppear()
     func didTapTryAgain()
     func didTapLetsGo()
+    func didTapDismiss()
 }
 
 final class DrawMovieViewModel: DrawMovieViewModelProtocol {
@@ -47,6 +48,10 @@ final class DrawMovieViewModel: DrawMovieViewModelProtocol {
                 navigator.dismiss()
             }
         }
+    }
+
+    func didTapDismiss() {
+        navigator.dismiss()
     }
 
     private func drawMovie() {

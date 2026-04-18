@@ -3,6 +3,7 @@ import AVFoundation
 
 final class DrawMovieViewController: UIViewController {
 
+    private let animationlength: Double = 2
     private let viewModel: any DrawMovieViewModelProtocol
     private let hatSourceFrame: CGRect
     private let hatImage: UIImage?
@@ -13,10 +14,10 @@ final class DrawMovieViewController: UIViewController {
     @IBOutlet private weak var tryAgainButton: UIButton!
     @IBOutlet private weak var letsGoButton: UIButton!
     @IBOutlet private weak var buttonStack: UIStackView!
+    @IBOutlet private weak var movieTitleLabel: UILabel!
     @IBOutlet private weak var posterCenterYConstraint: NSLayoutConstraint!
 
     private var drumrollPlayer: AVAudioPlayer?
-    private var successPlayer: AVAudioPlayer?
     private var leftSpotlightLayer: CAGradientLayer?
     private var rightSpotlightLayer: CAGradientLayer?
 
@@ -43,7 +44,11 @@ final class DrawMovieViewController: UIViewController {
 
         posterImageView.clipsToBounds = true
         posterImageView.alpha = 0
+        movieTitleLabel.alpha = 0
         buttonStack.alpha = 0
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapBackground))
+        dimmingView.addGestureRecognizer(tap)
 
         viewModel.viewDelegate = self
     }
@@ -69,9 +74,14 @@ final class DrawMovieViewController: UIViewController {
         viewModel.didTapLetsGo()
     }
 
+    @objc private func didTapBackground() {
+        viewModel.didTapDismiss()
+    }
+
     // MARK: - Animation Sequence
 
     private func startRevealSequence(for movie: Movie) {
+        movieTitleLabel.text = movie.title
         if let posterURL = movie.posterURL {
             posterImageView.load(from: posterURL)
         }
@@ -82,47 +92,41 @@ final class DrawMovieViewController: UIViewController {
     private func startDrumroll() {
         animateSpotlights()
 
-        if let url = Bundle.main.url(forResource: "drumroll", withExtension: "mp3") {
+        if let url = Bundle.main.url(forResource: "drumroll-trimmed", withExtension: "mp3") {
             do {
                 drumrollPlayer = try AVAudioPlayer(contentsOf: url)
-                drumrollPlayer?.delegate = self
                 drumrollPlayer?.play()
-                return
             } catch {}
         }
 
-        // Fallback: no audio file, use timed delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+        // Trigger the continuation of the animation
+        DispatchQueue.main.asyncAfter(deadline: .now() + animationlength) { [weak self] in
             self?.drumrollDidFinish()
         }
     }
 
     private func drumrollDidFinish() {
-        playSuccessSound()
         animatePosterReveal()
-        animateButtonsIn()
         removeSpotlights()
-    }
-
-    private func playSuccessSound() {
-        guard let url = Bundle.main.url(forResource: "success", withExtension: "mp3") else { return }
-        successPlayer = try? AVAudioPlayer(contentsOf: url)
-        successPlayer?.play()
     }
 
     // MARK: - Poster Animation
 
     private func animatePosterReveal() {
-        posterCenterYConstraint.constant = -80
+        posterCenterYConstraint.constant = -130
 
         UIView.animate(
             withDuration: 0.8,
             delay: 0,
-            options: .curveLinear
-        ) {
-            self.posterImageView.alpha = 1
-            self.view.layoutIfNeeded()
-        }
+            options: .curveLinear,
+            animations: {
+                self.posterImageView.alpha = 1
+                self.view.layoutIfNeeded()
+            },
+            completion: { _ in
+                self.animateTitleAndButtonsIn()
+            }
+        )
     }
 
     private func resetPosterPosition() {
@@ -131,8 +135,9 @@ final class DrawMovieViewController: UIViewController {
         view.layoutIfNeeded()
     }
 
-    private func animateButtonsIn() {
-        UIView.animate(withDuration: 0.3, delay: 0.4) {
+    private func animateTitleAndButtonsIn() {
+        UIView.animate(withDuration: 0.3) {
+            self.movieTitleLabel.alpha = 1
             self.buttonStack.alpha = 1
         }
     }
@@ -142,6 +147,7 @@ final class DrawMovieViewController: UIViewController {
             withDuration: 0.3,
             animations: {
                 self.posterImageView.alpha = 0
+                self.movieTitleLabel.alpha = 0
                 self.buttonStack.alpha = 0
             },
             completion: { _ in
@@ -156,16 +162,18 @@ final class DrawMovieViewController: UIViewController {
     private func animateSpotlights() {
         let screenBounds = view.bounds
 
+        let offscreenY: CGFloat = -100
+
         let leftLayer = makeSpotlightLayer(bounds: screenBounds)
         leftLayer.anchorPoint = CGPoint(x: 0, y: 0)
-        leftLayer.position = CGPoint(x: 0, y: 0)
+        leftLayer.position = CGPoint(x: 0, y: offscreenY)
         leftLayer.transform = CATransform3DMakeRotation(-CGFloat.pi / 6, 0, 0, 1)
         view.layer.addSublayer(leftLayer)
         leftSpotlightLayer = leftLayer
 
         let rightLayer = makeSpotlightLayer(bounds: screenBounds)
         rightLayer.anchorPoint = CGPoint(x: 1, y: 0)
-        rightLayer.position = CGPoint(x: screenBounds.width, y: 0)
+        rightLayer.position = CGPoint(x: screenBounds.width, y: offscreenY)
         rightLayer.transform = CATransform3DMakeRotation(CGFloat.pi / 6, 0, 0, 1)
         view.layer.addSublayer(rightLayer)
         rightSpotlightLayer = rightLayer
@@ -174,7 +182,7 @@ final class DrawMovieViewController: UIViewController {
         let leftSweep = CABasicAnimation(keyPath: "transform.rotation.z")
         leftSweep.fromValue = -CGFloat.pi / 6
         leftSweep.toValue = CGFloat.pi / 8
-        leftSweep.duration = 3.0
+        leftSweep.duration = animationlength
         leftSweep.fillMode = .forwards
         leftSweep.isRemovedOnCompletion = false
         leftLayer.add(leftSweep, forKey: "sweep")
@@ -182,18 +190,18 @@ final class DrawMovieViewController: UIViewController {
         let rightSweep = CABasicAnimation(keyPath: "transform.rotation.z")
         rightSweep.fromValue = CGFloat.pi / 6
         rightSweep.toValue = -CGFloat.pi / 8
-        rightSweep.duration = 3.0
+        rightSweep.duration = animationlength
         rightSweep.fillMode = .forwards
         rightSweep.isRemovedOnCompletion = false
         rightLayer.add(rightSweep, forKey: "sweep")
 
         // Strobe pulse
         let pulse = CABasicAnimation(keyPath: "opacity")
-        pulse.fromValue = 0.15
-        pulse.toValue = 0.4
+        pulse.fromValue = 0.3
+        pulse.toValue = 0.6
         pulse.duration = 0.15
         pulse.autoreverses = true
-        pulse.repeatCount = 10
+        pulse.repeatCount = 13
         leftLayer.add(pulse, forKey: "strobe")
         rightLayer.add(pulse, forKey: "strobe")
     }
@@ -208,7 +216,7 @@ final class DrawMovieViewController: UIViewController {
         layer.startPoint = CGPoint(x: 0.5, y: 0)
         layer.endPoint = CGPoint(x: 1.0, y: 1.0)
         layer.frame = CGRect(x: 0, y: 0, width: 120, height: bounds.height)
-        layer.opacity = 0.3
+        layer.opacity = 0.5
         return layer
     }
 
@@ -229,16 +237,6 @@ extension DrawMovieViewController: DrawMovieViewModelViewDelegate {
     func bind(viewModel: any DrawMovieViewModelProtocol) {
         guard let movie = viewModel.drawnMovie else { return }
         startRevealSequence(for: movie)
-    }
-}
-
-// MARK: - AVAudioPlayerDelegate
-
-extension DrawMovieViewController: AVAudioPlayerDelegate {
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        if player === drumrollPlayer {
-            drumrollDidFinish()
-        }
     }
 }
 

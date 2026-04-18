@@ -13,6 +13,7 @@
                 <outlet property="dimmingView" destination="dim-00-001" id="dim-cn-001"/>
                 <outlet property="hatImageView" destination="hat-00-001" id="hat-cn-001"/>
                 <outlet property="letsGoButton" destination="btn-00-002" id="btn-cn-002"/>
+                <outlet property="movieTitleLabel" destination="ttl-00-001" id="ttl-cn-001"/>
                 <outlet property="posterCenterYConstraint" destination="pst-cy-001" id="pst-cy-cn1"/>
                 <outlet property="posterImageView" destination="pst-00-001" id="pst-cn-001"/>
                 <outlet property="tryAgainButton" destination="btn-00-001" id="btn-cn-001"/>
@@ -28,12 +29,12 @@
                     <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.88" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="pst-00-001" customClass="RemoteImageView" customModule="MovieHat" customModuleProvider="target">
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="pst-00-001" userLabel="Poster" customClass="RemoteImageView" customModule="MovieHat" customModuleProvider="target">
                     <rect key="frame" x="106.66666666666669" y="591" width="180" height="270"/>
                     <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" secondItem="pst-00-001" secondAttribute="width" multiplier="3:2" id="pst-h-001"/>
-                        <constraint firstAttribute="width" constant="180" id="pst-w-001"/>
+                        <constraint firstAttribute="width" constant="220" id="pst-w-001"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -41,6 +42,11 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ttl-00-001" userLabel="Movie Title">
+                    <rect key="frame" x="40" y="870" width="313" height="0.0"/>
+                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </label>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="Hat" translatesAutoresizingMaskIntoConstraints="NO" id="hat-00-001">
                     <rect key="frame" x="0.0" y="600.66666666666663" width="393" height="301.33333333333337"/>
                     <constraints>
@@ -103,7 +109,10 @@
                 <constraint firstItem="hat-00-001" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="hat-r-001"/>
                 <constraint firstItem="pst-00-001" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="pst-cx-001"/>
                 <constraint firstItem="pst-00-001" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="300" id="pst-cy-001"/>
-                <constraint firstItem="stk-00-001" firstAttribute="bottom" secondItem="hat-00-001" secondAttribute="top" constant="-20" id="stk-b-001"/>
+                <constraint firstItem="ttl-00-001" firstAttribute="top" secondItem="pst-00-001" secondAttribute="bottom" constant="16" id="ttl-t-001"/>
+                <constraint firstItem="ttl-00-001" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="40" id="ttl-l-001"/>
+                <constraint firstItem="ttl-00-001" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" constant="-40" id="ttl-r-001"/>
+                <constraint firstItem="stk-00-001" firstAttribute="top" secondItem="ttl-00-001" secondAttribute="bottom" constant="20" id="stk-t-001"/>
                 <constraint firstItem="stk-00-001" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="40" id="stk-l-001"/>
                 <constraint firstItem="stk-00-001" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" constant="-40" id="stk-r-001"/>
             </constraints>
