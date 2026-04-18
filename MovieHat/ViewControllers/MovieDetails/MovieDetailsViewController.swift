@@ -11,15 +11,14 @@ final class MovieDetailsViewController: UIViewController {
     @IBOutlet private weak var directorsLabel: UILabel!
     @IBOutlet private weak var writersLabel: UILabel!
     @IBOutlet private weak var starsLabel: UILabel!
-    @IBOutlet private weak var addToHatButton: UIButton!
-    @IBOutlet private weak var removeFromHatButton: UIButton!
+    @IBOutlet private weak var ctaButton: UIButton!
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet private weak var errorLabel: UILabel!
     @IBOutlet private weak var posterGradientView: UIView!
 
-    private let viewModel: MovieDetailsViewModel
+    private let viewModel: MovieDetailViewModelProtocol
 
-    init(viewModel: MovieDetailsViewModel) {
+    init(viewModel: MovieDetailViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -34,8 +33,7 @@ final class MovieDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.contentInsetAdjustmentBehavior = .never
-        addToHatButton.layer.cornerRadius = 12
-        addToHatButton.addTarget(self, action: #selector(didTapAddToHat), for: .touchUpInside)
+        ctaButton.layer.cornerRadius = 12
         gradientLayer.colors = [UIColor.systemBackground.withAlphaComponent(0).cgColor, UIColor.systemBackground.cgColor]
         posterGradientView.layer.addSublayer(gradientLayer)
         viewModel.viewDelegate = self
@@ -53,9 +51,9 @@ final class MovieDetailsViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.setNavigationBarHidden(false, animated: animated)
+
         viewModel.viewWillAppear()
-        
-        applyLoading()
+        bind()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -67,6 +65,7 @@ final class MovieDetailsViewController: UIViewController {
         scrollView.isHidden = true
         activityIndicator.startAnimating()
         errorLabel.isHidden = true
+        ctaButton.isHidden = !viewModel.shouldShowCta
     }
 
     private func applyLoaded(_ model: MovieDetailModel) {
@@ -90,8 +89,9 @@ final class MovieDetailsViewController: UIViewController {
         starsLabel.text = model.stars
         starsLabel.isHidden = model.stars == nil
         
-        addToHatButton.isHidden = !viewModel.showAddToHatButton
-        removeFromHatButton.isHidden = !viewModel.showRemoveFromHatButton
+        ctaButton.isHidden = !viewModel.shouldShowCta
+        ctaButton.setTitle(viewModel.ctaLabel, for: .normal)
+        ctaButton.backgroundColor = viewModel.isCtaDestructive ? .systemRed.withAlphaComponent(0.7) : .systemBlue.withAlphaComponent(0.7)
     }
 
     private func applyError(_ message: String) {
@@ -99,19 +99,14 @@ final class MovieDetailsViewController: UIViewController {
         activityIndicator.stopAnimating()
         errorLabel.isHidden = false
         errorLabel.text = message
+        ctaButton.isHidden = !viewModel.shouldShowCta
+    }
+    
+    @IBAction func didTapCtaButton(_ sender: Any) {
+        viewModel.didTapCta()
     }
 
-    @objc private func didTapAddToHat() {
-        viewModel.didTapAddToHat()
-    }
-
-    @IBAction func didTapRemoveFomrHat(_ sender: Any) {
-        viewModel.didTapRemoveFromHat()
-    }
-}
-
-extension MovieDetailsViewController: MovieDetailsViewModelViewDelegate {
-    func bind(viewModel: MovieDetailsViewModel) {
+    private func bind() {
         switch viewModel.state {
         case .loading:
             applyLoading()
@@ -120,5 +115,11 @@ extension MovieDetailsViewController: MovieDetailsViewModelViewDelegate {
         case .error(let message):
             applyError(message)
         }
+    }
+}
+
+extension MovieDetailsViewController: MovieDetailsViewModelViewDelegate {
+    func bind(viewModel: MovieDetailsViewModel) {
+        bind()
     }
 }
