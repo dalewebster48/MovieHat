@@ -1,22 +1,25 @@
 # Bugs
-- Genres just not working
+- Dark mode is broken
 - Currently no filtering for movies / other types of media
 - Ugly gray square when loading images
 
 # Missing features
 - Adding movie straight from search results
-- Draw from hat animation / controller transition
 - Share drawn movie on instagram
-- 'Put back in hat'
 - Load movie detail from stored movie in database (no network request)
 - Image cache
-- View everything in hat page
 
 # Code Health
 - Create a color palette for consistent themeing
 - View model and state machine implementation is broken
 
+# Done
+- Draw from hat animation / controller transition
+- 'Put back in hat'
+- View everything in hat page
+
 # Fixed
+- Genres just not working
 - AddMboie search results should have an empty state
 - Home screen does not refresh when dismissing presented controllers
 - The 'in hat' state does not update when tapping buttons in movie details view
