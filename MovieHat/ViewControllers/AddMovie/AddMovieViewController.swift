@@ -3,7 +3,7 @@ import UIKit
 final class AddMovieViewController: UIViewController {
 
     private enum State {
-        case idle
+        case idle(String)
         case searching
         case results([MovieSearchResultViewModel])
         case empty
@@ -12,11 +12,10 @@ final class AddMovieViewController: UIViewController {
 
     private let viewModel: AddMovieViewModel
 
-    private var state: State = .idle {
+    private var state: State = .idle("") {
         didSet { applyState() }
     }
 
-    @IBOutlet private weak var closeButton: UIButton!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var searchTextField: UITextField!
     @IBOutlet private weak var collectionView: UICollectionView!
@@ -36,7 +35,6 @@ final class AddMovieViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         searchTextField.addTarget(self, action: #selector(searchTextChanged), for: .editingChanged)
 
         searchTextField.layer.cornerRadius = 12
@@ -61,11 +59,8 @@ final class AddMovieViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewModel.viewWillAppear()
         searchTextField.becomeFirstResponder()
-    }
-
-    @objc private func closeTapped() {
-        viewModel.didTapClose()
     }
 
     @objc private func searchTextChanged() {
@@ -74,30 +69,42 @@ final class AddMovieViewController: UIViewController {
 
     private func applyState() {
         switch state {
-        case .idle:
-            collectionView.isHidden = true
+        case .idle(let message):
+            collectionView.isHidden = false
+            collectionView.reloadData()
             activityIndicator.stopAnimating()
             statusLabel.isHidden = true
+            let label = UILabel()
+            label.text = message
+            label.textAlignment = .center
+            label.font = .preferredFont(forTextStyle: .subheadline)
+            label.textColor = .secondaryLabel
+            label.numberOfLines = 0
+            collectionView.backgroundView = label
 
         case .searching:
             collectionView.isHidden = true
+            collectionView.backgroundView = nil
             activityIndicator.startAnimating()
             statusLabel.isHidden = true
 
         case .results:
             collectionView.isHidden = false
+            collectionView.backgroundView = nil
             collectionView.reloadData()
             activityIndicator.stopAnimating()
             statusLabel.isHidden = true
 
         case .empty:
             collectionView.isHidden = true
+            collectionView.backgroundView = nil
             activityIndicator.stopAnimating()
             statusLabel.text = "No results found"
             statusLabel.isHidden = false
 
         case .error(let message):
             collectionView.isHidden = true
+            collectionView.backgroundView = nil
             activityIndicator.stopAnimating()
             statusLabel.text = message
             statusLabel.isHidden = false
@@ -114,7 +121,7 @@ extension AddMovieViewController: AddMovieViewModelViewDelegate {
         } else if viewModel.searchResults.isEmpty && !(searchTextField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             state = .empty
         } else if viewModel.searchResults.isEmpty {
-            state = .idle
+            state = .idle(viewModel.idleMessage)
         } else {
             state = .results(viewModel.searchResults)
         }

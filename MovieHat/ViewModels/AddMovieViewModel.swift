@@ -21,6 +21,10 @@ final class AddMovieViewModel {
         movies.map { viewModelFactory.makeMovieSearchResultViewModel(movie: $0) }
     }
 
+    var idleMessage: String {
+        "Search for a movie to add to your hat"
+    }
+
     private(set) var isSearching: Bool = false {
         didSet { bind() }
     }
@@ -39,6 +43,10 @@ final class AddMovieViewModel {
         self.movieHatService = movieHatService
         self.navigator = navigator
         self.viewModelFactory = viewModelFactory
+    }
+
+    func viewWillAppear() {
+        bind()
     }
 
     func searchQueryChanged(_ query: String) {
@@ -73,10 +81,6 @@ final class AddMovieViewModel {
     func didSelectMovie(at index: Int) {
         guard index < movies.count else { return }
         navigator.navigate(.push(.movieDetails(movieId: movies[index].id)))
-    }
-
-    func didTapClose() {
-        navigator.dismiss()
     }
 
     private func bind() {

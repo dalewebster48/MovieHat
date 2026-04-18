@@ -1,6 +1,6 @@
 import UIKit
 
-final class AppNavigator: Navigator {
+final class AppNavigator: NSObject, Navigator, UIAdaptivePresentationControllerDelegate {
     private var navigationController: UINavigationController?
     private weak var presentedNavigationController: UINavigationController?
     private var viewControllerFactory: ViewControllerFactory?
@@ -23,6 +23,7 @@ final class AppNavigator: Navigator {
             let nav = UINavigationController(rootViewController: vc)
             nav.isNavigationBarHidden = true
             nav.modalPresentationStyle = .formSheet
+            nav.presentationController?.delegate = self
             presentedNavigationController.present(nav, animated: true)
             self.presentedNavigationController = nav
 
@@ -37,8 +38,14 @@ final class AppNavigator: Navigator {
                 sheet.detents = [.medium()]
                 sheet.prefersGrabberVisible = true
             }
+            vc.presentationController?.delegate = self
             presentedNavigationController.present(vc, animated: true)
         }
+    }
+
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        let presenting = presentationController.presentingViewController as? UINavigationController
+        self.presentedNavigationController = presenting ?? navigationController
     }
 
     func dismiss() {
