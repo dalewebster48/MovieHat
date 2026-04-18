@@ -23,7 +23,7 @@ final class ViewModelFactory {
         )
     }
 
-    func makeMovieSearchResultViewModel(movie: Movie) -> MovieSearchResultViewModel {
+    func makeMovieSearchResultViewModel(movie: MovieSearchResult) -> MovieSearchResultViewModel {
         MovieSearchResultViewModel(movie: movie)
     }
 
@@ -34,9 +34,9 @@ final class ViewModelFactory {
         )
     }
 
-    func makeMovieDetailsViewModel(movie: Movie) -> MovieDetailsViewModel {
+    func makeMovieDetailsViewModel(movieId: String) -> MovieDetailsViewModel {
         MovieDetailsViewModel(
-            movie: movie,
+            movieId: movieId,
             movieSearchService: services.movieSearchService,
             movieHatService: services.movieHatService,
             navigator: navigator

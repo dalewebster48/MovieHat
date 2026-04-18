@@ -1,12 +1,22 @@
 import Foundation
 
-struct Movie: Identifiable, Codable {
+struct Movie: Identifiable {
     let id: String
+    let type: String?
     let title: String
+    let originalTitle: String?
+    let posterURL: URL?
     let year: Int?
+    let endYear: Int?
     let runtimeSeconds: Int?
     let genres: [String]
-    let plot: String?
     let aggregateRating: Float?
-    let posterURL: URL?
+    let voteCount: Int?
+    let metacriticScore: Int?
+    let plot: String?
+    let directors: [String]
+    let writers: [String]
+    let stars: [String]
+    let originCountries: [String]
+    let spokenLanguages: [String]
 }

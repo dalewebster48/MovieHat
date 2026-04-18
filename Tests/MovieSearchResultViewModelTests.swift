@@ -6,18 +6,13 @@ final class MovieSearchResultViewModelTests: XCTestCase {
     private func makeMovie(
         title: String = "Test Movie",
         year: Int? = nil,
-        runtimeSeconds: Int? = nil,
-        genres: [String] = [],
         aggregateRating: Float? = nil,
         posterURL: URL? = nil
-    ) -> Movie {
-        Movie(
+    ) -> MovieSearchResult {
+        MovieSearchResult(
             id: "tt0000001",
             title: title,
             year: year,
-            runtimeSeconds: runtimeSeconds,
-            genres: genres,
-            plot: nil,
             aggregateRating: aggregateRating,
             posterURL: posterURL
         )
@@ -30,43 +25,16 @@ final class MovieSearchResultViewModelTests: XCTestCase {
         XCTAssertEqual(vm.title, "Inception")
     }
 
-    // MARK: - Detail
+    // MARK: - Year
 
-    func testDetailIsNilWhenNoYearOrRuntime() {
+    func testYearIsNilWhenMissing() {
         let vm = MovieSearchResultViewModel(movie: makeMovie())
-        XCTAssertNil(vm.detail)
+        XCTAssertNil(vm.year)
     }
 
-    func testDetailShowsYearOnly() {
+    func testYearShowsValue() {
         let vm = MovieSearchResultViewModel(movie: makeMovie(year: 2010))
-        XCTAssertEqual(vm.detail, "2010")
-    }
-
-    func testDetailShowsRuntimeOnly() {
-        let vm = MovieSearchResultViewModel(movie: makeMovie(runtimeSeconds: 7200))
-        XCTAssertEqual(vm.detail, "120 min")
-    }
-
-    func testDetailShowsYearAndRuntime() {
-        let vm = MovieSearchResultViewModel(movie: makeMovie(year: 2010, runtimeSeconds: 5400))
-        XCTAssertEqual(vm.detail, "2010 · 90 min")
-    }
-
-    // MARK: - Genres
-
-    func testGenresIsNilWhenEmpty() {
-        let vm = MovieSearchResultViewModel(movie: makeMovie())
-        XCTAssertNil(vm.genres)
-    }
-
-    func testGenresJoinedWithComma() {
-        let vm = MovieSearchResultViewModel(movie: makeMovie(genres: ["Action", "Sci-Fi"]))
-        XCTAssertEqual(vm.genres, "Action, Sci-Fi")
-    }
-
-    func testSingleGenre() {
-        let vm = MovieSearchResultViewModel(movie: makeMovie(genres: ["Drama"]))
-        XCTAssertEqual(vm.genres, "Drama")
+        XCTAssertEqual(vm.year, "2010")
     }
 
     // MARK: - Rating

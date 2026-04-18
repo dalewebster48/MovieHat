@@ -14,7 +14,7 @@ final class AddMovieViewModel {
 
     weak var viewDelegate: (any AddMovieViewModelViewDelegate)?
 
-    private var movies: [Movie] = [] {
+    private var movies: [MovieSearchResult] = [] {
         didSet { bind() }
     }
 
@@ -75,7 +75,7 @@ final class AddMovieViewModel {
 
     func didSelectMovie(at index: Int) {
         guard index < movies.count else { return }
-        navigator.navigate(.push(.movieDetails(movie: movies[index])))
+        navigator.navigate(.push(.movieDetails(movieId: movies[index].id)))
     }
 
     func didTapClose() {

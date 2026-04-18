@@ -6,7 +6,7 @@ struct IMDBSearchResponse: Decodable {
 
 struct IMDBTitle: Decodable {
     let id: String
-    let type: IMDBType?
+    let type: String?
     let primaryTitle: String
     let startYear: Int?
     let rating: IMDBRating?
@@ -22,11 +22,6 @@ struct IMDBImage: Decodable {
     let url: String?
     let width: Int?
     let height: Int?
-}
-
-enum IMDBType: String, Decodable {
-    case movie
-    case tvSeries
 }
 
 // MARK: - IMDB Title Response

@@ -24,8 +24,11 @@ final class SQLiteMovieHatRepository: MovieHatRepository {
         // to collapse each movie's genres into a single comma-separated string.
         // GROUP BY ensures one row per movie.
         let sql = """
-            SELECT movies.id, movies.title, movies.year, movies.runtimeSeconds,
-                   movies.plot, movies.aggregateRating, movies.posterURL,
+            SELECT movies.id, movies.type, movies.title, movies.originalTitle,
+                   movies.posterURL, movies.year, movies.endYear, movies.runtimeSeconds,
+                   movies.aggregateRating, movies.voteCount, movies.metacriticScore,
+                   movies.plot, movies.directors, movies.writers, movies.stars,
+                   movies.originCountries, movies.spokenLanguages,
                    GROUP_CONCAT(genres.name) AS genreNames
             FROM movies
             LEFT JOIN movie_genres ON movies.id = movie_genres.movieId
@@ -34,18 +37,29 @@ final class SQLiteMovieHatRepository: MovieHatRepository {
             """
 
         return try db.prepare(sql).map { row in
-            let genreString = row[7] as? String
-            let genres = genreString?.split(separator: ",").map(String.init) ?? []
+            let splitOrEmpty: (Int) -> [String] = { index in
+                (row[index] as? String)?.split(separator: ",").map(String.init) ?? []
+            }
 
             return Movie(
                 id: row[0] as! String,
-                title: row[1] as! String,
-                year: row[2] as? Int,
-                runtimeSeconds: row[3] as? Int,
-                genres: genres,
-                plot: row[4] as? String,
-                aggregateRating: (row[5] as? Double).map { Float($0) },
-                posterURL: (row[6] as? String).flatMap { URL(string: $0) }
+                type: row[1] as? String,
+                title: row[2] as! String,
+                originalTitle: row[3] as? String,
+                posterURL: (row[4] as? String).flatMap { URL(string: $0) },
+                year: row[5] as? Int,
+                endYear: row[6] as? Int,
+                runtimeSeconds: row[7] as? Int,
+                genres: splitOrEmpty(17),
+                aggregateRating: (row[8] as? Double).map { Float($0) },
+                voteCount: row[9] as? Int,
+                metacriticScore: row[10] as? Int,
+                plot: row[11] as? String,
+                directors: splitOrEmpty(12),
+                writers: splitOrEmpty(13),
+                stars: splitOrEmpty(14),
+                originCountries: splitOrEmpty(15),
+                spokenLanguages: splitOrEmpty(16)
             )
         }
     }
@@ -53,12 +67,22 @@ final class SQLiteMovieHatRepository: MovieHatRepository {
     func insert(_ movie: Movie) async throws {
         try db.run(MoviesTable.table.insert(or: .replace,
             MoviesTable.id <- movie.id,
+            MoviesTable.type <- movie.type,
             MoviesTable.title <- movie.title,
+            MoviesTable.originalTitle <- movie.originalTitle,
+            MoviesTable.posterURL <- movie.posterURL?.absoluteString,
             MoviesTable.year <- movie.year,
+            MoviesTable.endYear <- movie.endYear,
             MoviesTable.runtimeSeconds <- movie.runtimeSeconds,
-            MoviesTable.plot <- movie.plot,
             MoviesTable.aggregateRating <- movie.aggregateRating.map { Double($0) },
-            MoviesTable.posterURL <- movie.posterURL?.absoluteString
+            MoviesTable.voteCount <- movie.voteCount,
+            MoviesTable.metacriticScore <- movie.metacriticScore,
+            MoviesTable.plot <- movie.plot,
+            MoviesTable.directors <- movie.directors.joined(separator: ","),
+            MoviesTable.writers <- movie.writers.joined(separator: ","),
+            MoviesTable.stars <- movie.stars.joined(separator: ","),
+            MoviesTable.originCountries <- movie.originCountries.joined(separator: ","),
+            MoviesTable.spokenLanguages <- movie.spokenLanguages.joined(separator: ",")
         ))
         try await genreRepository.setGenresForMovie(id: movie.id, genres: movie.genres)
     }

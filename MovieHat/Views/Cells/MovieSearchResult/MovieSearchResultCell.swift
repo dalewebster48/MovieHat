@@ -17,9 +17,8 @@ final class MovieSearchResultCell: UICollectionViewCell {
 
     func configure(with viewModel: MovieSearchResultViewModel) {
         titleLabel.text = viewModel.title
-        detailLabel.text = viewModel.detail
-        genresLabel.text = viewModel.genres
-        genresLabel.isHidden = viewModel.genres == nil
+        detailLabel.text = viewModel.year
+        genresLabel.isHidden = true
         ratingLabel.text = viewModel.rating
         ratingLabel.isHidden = viewModel.rating == nil
 

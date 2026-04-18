@@ -1,8 +1,8 @@
 import Foundation
 
 protocol MovieSearchRepository: AnyObject {
-    func searchMovies(query: String) async throws -> [Movie]
-    func getMovie(id: String) async throws -> RichMovie
+    func searchMovies(query: String) async throws -> [MovieSearchResult]
+    func getMovie(id: String) async throws -> Movie
 }
 
 // MARK: - IMDB Implementation
@@ -14,28 +14,25 @@ final class IMDBMovieSearchRepository: MovieSearchRepository {
         self.networkClient = networkClient
     }
 
-    func searchMovies(query: String) async throws -> [Movie] {
+    func searchMovies(query: String) async throws -> [MovieSearchResult] {
         let request = IMDBSearchRequest(query: query, limit: 10)
         let response: IMDBSearchResponse = try await networkClient.get(url: .imdbSearchTitles, query: request)
 
         return response.titles.map { title in
-            Movie(
+            MovieSearchResult(
                 id: title.id,
                 title: title.primaryTitle,
                 year: title.startYear,
-                runtimeSeconds: title.runtimeSeconds,
-                genres: title.genres ?? [],
-                plot: title.plot,
                 aggregateRating: title.rating?.aggregateRating,
                 posterURL: title.primaryImage?.url.flatMap { URL(string: $0) }
             )
         }
     }
 
-    func getMovie(id: String) async throws -> RichMovie {
+    func getMovie(id: String) async throws -> Movie {
         let response: IMDBTitleResponse = try await networkClient.get(url: .imdbTitle(id: id))
 
-        return RichMovie(
+        return Movie(
             id: response.id,
             type: response.type,
             title: response.primaryTitle,
