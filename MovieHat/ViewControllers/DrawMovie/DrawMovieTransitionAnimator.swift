@@ -13,7 +13,7 @@ final class DrawMoviePresentationAnimator: NSObject, UIViewControllerAnimatedTra
     }
 
     func transitionDuration(using transitionContext: (any UIViewControllerContextTransitioning)?) -> TimeInterval {
-        0.6
+        1.0
     }
 
     func animateTransition(using transitionContext: any UIViewControllerContextTransitioning) {
@@ -49,8 +49,7 @@ final class DrawMoviePresentationAnimator: NSObject, UIViewControllerAnimatedTra
         let hatAspect: CGFloat = 593.0 / 773.0
         let destWidth = screenBounds.width
         let destHeight = destWidth * hatAspect
-        let offScreenAmount = destHeight / 3.0
-        let destY = screenBounds.height - destHeight + offScreenAmount
+        let destY = screenBounds.height - destHeight + 50
         let destinationFrame = CGRect(x: 0, y: destY, width: destWidth, height: destHeight)
 
         UIView.animate(
