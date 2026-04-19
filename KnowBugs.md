@@ -6,8 +6,11 @@
 - Can click on movie drawn from hat
 - Adding movie straight from search results
 - Share drawn movie on instagram
+- Ads
+- In App purchase to permanently remove the ads
 
 # 1.0
+- Done
 
 # Bugs
 
