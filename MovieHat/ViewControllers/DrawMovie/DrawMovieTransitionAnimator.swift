@@ -47,10 +47,10 @@ final class DrawMoviePresentationAnimator: NSObject, UIViewControllerAnimatedTra
         // Calculate destination frame: edge-to-edge, bottom 1/3 off-screen
         let screenBounds = container.bounds
         let hatAspect: CGFloat = 593.0 / 773.0
-        let destWidth = screenBounds.width
+        let destWidth = screenBounds.width + 100
         let destHeight = destWidth * hatAspect
-        let destY = screenBounds.height - destHeight + 50
-        let destinationFrame = CGRect(x: 0, y: destY, width: destWidth, height: destHeight)
+        let destY = screenBounds.height - destHeight + 100
+        let destinationFrame = CGRect(x: -50, y: destY, width: destWidth, height: destHeight)
 
         UIView.animate(
             withDuration: transitionDuration(using: transitionContext),
