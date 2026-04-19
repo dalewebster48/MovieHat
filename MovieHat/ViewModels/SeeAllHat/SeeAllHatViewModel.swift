@@ -46,7 +46,7 @@ final class SeeAllHatViewModel: SeeAllHatViewModelProtocol {
 
     func didSelectMovie(at index: Int) {
         guard index < movies.count else { return }
-        navigator.navigate(.push(.movieDetails(movieId: movies[index].id)))
+        navigator.navigate(.push(.movieDetailsPreloaded(movie: movies[index])))
     }
 
     private func updateMovies() {

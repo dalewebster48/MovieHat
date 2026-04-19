@@ -51,6 +51,16 @@ final class ViewModelFactory {
         )
     }
 
+    func makeMovieDetailsViewModel(movie: Movie) -> MovieDetailsViewModel {
+        MovieDetailsViewModel(
+            movie: movie,
+            movieSearchService: services.movieSearchService,
+            movieHatService: services.movieHatService,
+            imageCacheService: services.imageCacheService,
+            navigator: navigator
+        )
+    }
+
     func makeSeeAllHatViewModel() -> SeeAllHatViewModel {
         SeeAllHatViewModel(
             movieHatService: services.movieHatService,

@@ -41,7 +41,7 @@ final class MovieDetailsViewModel: MovieDetailViewModelProtocol {
     var shouldShowCta = false
     var ctaLabel: String = MovieDetailsViewModel.CTA_ADD_LABEL
     var isCtaDestructive = false
-    
+
     weak var viewDelegate: (any MovieDetailsViewModelViewDelegate)?
 
     init(
@@ -56,7 +56,24 @@ final class MovieDetailsViewModel: MovieDetailViewModelProtocol {
         self.movieHatService = movieHatService
         self.imageCacheService = imageCacheService
         self.navigator = navigator
-        
+
+        self.movieHatService.addConsumer(self)
+    }
+
+    init(
+        movie: Movie,
+        movieSearchService: any MovieSearchService,
+        movieHatService: any MovieHatService,
+        imageCacheService: any ImageCacheService,
+        navigator: any Navigator
+    ) {
+        self.movieId = movie.id
+        self.movie = movie
+        self.movieSearchService = movieSearchService
+        self.movieHatService = movieHatService
+        self.imageCacheService = imageCacheService
+        self.navigator = navigator
+
         self.movieHatService.addConsumer(self)
     }
 
@@ -65,7 +82,11 @@ final class MovieDetailsViewModel: MovieDetailViewModelProtocol {
     }
 
     func viewWillAppear() {
-        loadMovie()
+        if let movie {
+            loadPreloadedMovie(movie)
+        } else {
+            loadMovie()
+        }
     }
     
     func didTapCta() {
@@ -88,6 +109,18 @@ final class MovieDetailsViewModel: MovieDetailViewModelProtocol {
         }
     }
     
+    private func loadPreloadedMovie(_ movie: Movie) {
+        Task {
+            do {
+                let isInHat = try await movieHatService.containsMovie(id: movieId)
+                updateCta(isInHat: isInHat)
+                state = .loaded(MovieDetailModel(movie: movie))
+            } catch {
+                state = .error(error.localizedDescription)
+            }
+        }
+    }
+
     private func loadMovie() {
         Task {
             do {

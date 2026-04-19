@@ -31,6 +31,11 @@ final class ViewControllerFactory {
         return MovieDetailsViewController(viewModel: viewModel)
     }
 
+    func makeMovieDetailsViewController(movie: Movie) -> MovieDetailsViewController {
+        let viewModel = viewModelFactory.makeMovieDetailsViewModel(movie: movie)
+        return MovieDetailsViewController(viewModel: viewModel)
+    }
+
     func makeSeeAllHatViewController() -> SeeAllHatViewController {
         let viewModel = viewModelFactory.makeSeeAllHatViewModel()
         return SeeAllHatViewController(viewModel: viewModel)

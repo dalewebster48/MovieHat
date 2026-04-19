@@ -1,11 +1,11 @@
-# Bugs
-- Ugly gray square when loading images
-
-# Missing features
+# 1.1
 - Adding movie straight from search results
 - Share drawn movie on instagram
+
+# 1.0
 - Load movie detail from stored movie in database (no network request)
-- Image cache
+
+# Bugs
 
 # Code Health
 - View model and state machine implementation is broken
@@ -17,6 +17,8 @@
 - Create a color palette for consistent themeing
 
 # Fixed
+- Image cache
+- Ugly gray square when loading images
 - Currently no filtering for movies / other types of media
 - See all is visible on home screen when there are no movies
 - Dark mode is broken

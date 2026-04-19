@@ -84,6 +84,9 @@ final class AppNavigator: NSObject, Navigator, UIAdaptivePresentationControllerD
         case .movieDetails(let movieId):
             return viewControllerFactory.makeMovieDetailsViewController(movieId: movieId)
 
+        case .movieDetailsPreloaded(let movie):
+            return viewControllerFactory.makeMovieDetailsViewController(movie: movie)
+
         case .genrePicker(let onGenreSelected):
             return viewControllerFactory.makeGenrePickerViewController(
                 onGenreSelected: onGenreSelected

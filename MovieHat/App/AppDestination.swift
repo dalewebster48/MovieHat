@@ -3,6 +3,7 @@ import UIKit
 enum NavigationRoute {
     case addMovie
     case movieDetails(movieId: String)
+    case movieDetailsPreloaded(movie: Movie)
     case genrePicker(onGenreSelected: (String) -> Void)
     case seeAllHat
 }
