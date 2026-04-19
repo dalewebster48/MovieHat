@@ -18,8 +18,10 @@ final class IMDBMovieSearchRepository: MovieSearchRepository {
         let request = IMDBSearchRequest(query: query, limit: 10)
         let response: IMDBSearchResponse = try await networkClient.get(url: .imdbSearchTitles, query: request)
 
-        return response.titles.map { title in
-            MovieSearchResult(
+        return response.titles.compactMap { title in
+            guard title.type == "movie" else { return nil }
+            
+            return MovieSearchResult(
                 id: title.id,
                 title: title.primaryTitle,
                 year: title.startYear,

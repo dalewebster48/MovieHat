@@ -1,5 +1,4 @@
 # Bugs
-- See all is visible on home screen when there are no movies
 - Currently no filtering for movies / other types of media
 - Ugly gray square when loading images
 
@@ -19,6 +18,7 @@
 - Create a color palette for consistent themeing
 
 # Fixed
+- See all is visible on home screen when there are no movies
 - Dark mode is broken
 - Genres just not working
 - AddMboie search results should have an empty state
