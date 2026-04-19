@@ -175,7 +175,7 @@
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="sa1"/>
-            <color key="backgroundColor" red="0.97647058823529409" green="0.96470588235294119" blue="0.94509803921568625" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="sv1" firstAttribute="top" secondItem="sa1" secondAttribute="top" id="k0E"/>
                 <constraint firstItem="sv1" firstAttribute="leading" secondItem="v00" secondAttribute="leading" id="k0F"/>
@@ -197,6 +197,9 @@
         </systemColor>
         <systemColor name="secondarySystemBackgroundColor">
             <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

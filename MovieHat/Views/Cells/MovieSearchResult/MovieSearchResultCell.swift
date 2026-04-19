@@ -13,6 +13,15 @@ final class MovieSearchResultCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         posterImageView.layer.cornerRadius = 8
+        applyTheme()
+    }
+
+    private func applyTheme() {
+        posterImageView.backgroundColor = Theme.searchResultPosterBackground
+        titleLabel.textColor = Theme.primaryText
+        detailLabel.textColor = Theme.secondaryText
+        genresLabel.textColor = Theme.secondaryText
+        ratingLabel.textColor = Theme.ratingText
     }
 
     func configure(with viewModel: MovieSearchResultViewModel) {

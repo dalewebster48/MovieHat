@@ -46,17 +46,13 @@ final class HomeViewController: UIViewController {
         genreCard.configure(
             iconName: "theatermasks",
             title: "Pick a Genre",
-            subtitle: "Choose a genre,\nthen draw",
-            cardBackgroundColor: UIColor.systemPurple.withAlphaComponent(0.08),
-            iconTint: .systemPurple
+            subtitle: "Choose a genre,\nthen draw"
         )
 
         pullCard.configure(
             iconName: "wand.and.stars",
             title: "Pull from the Hat",
-            subtitle: "Get a random movie\nfor tonight",
-            cardBackgroundColor: UIColor.systemOrange.withAlphaComponent(0.08),
-            iconTint: .systemOrange
+            subtitle: "Get a random movie\nfor tonight"
         )
         pullCard.onTap = { [weak self] in
             self?.viewModel.didTapDrawMovie()
@@ -69,10 +65,11 @@ final class HomeViewController: UIViewController {
         ctaSubtitleLabel.font = .preferredFont(forTextStyle: .subheadline)
 
         hatSectionIcon.image = UIImage(systemName: "film.stack")
-        hatSectionIcon.tintColor = .label
 
         movieCountBadge.layer.cornerRadius = 10
         movieCountBadge.clipsToBounds = true
+
+        applyTheme()
 
         viewModel.viewDelegate = self
         viewModel.viewDidLoad()
@@ -85,6 +82,28 @@ final class HomeViewController: UIViewController {
 
     func setHatVisible(_ visible: Bool) {
         hatImageView.alpha = visible ? 1 : 0
+    }
+
+    private func applyTheme() {
+        view.backgroundColor = Theme.screenBackground
+        titleLabel.textColor = Theme.primaryText
+        subtitleLabel.textColor = Theme.secondaryText
+        ctaTitleLabel.textColor = Theme.primaryText
+        ctaSubtitleLabel.textColor = Theme.secondaryText
+        hatSectionIcon.tintColor = Theme.primaryText
+        hatSectionTitle.textColor = Theme.primaryText
+        movieCountBadge.backgroundColor = Theme.badgeBackground
+        movieCountBadge.textColor = Theme.badgeText
+        searchButton.tintColor = Theme.primaryText
+
+        genreCard.applyTheme(
+            cardBackground: Theme.secondaryAccentBackground,
+            iconTint: Theme.secondaryAccent
+        )
+        pullCard.applyTheme(
+            cardBackground: Theme.primaryAccentBackground,
+            iconTint: Theme.primaryAccent
+        )
     }
 
     @IBAction func didTapSearch(_ sender: Any) {
@@ -108,7 +127,7 @@ extension HomeViewController: HomeViewModelViewDelegate {
             label.textAlignment = .center
             label.numberOfLines = 0
             label.font = .preferredFont(forTextStyle: .subheadline)
-            label.textColor = .secondaryLabel
+            label.textColor = Theme.secondaryText
             collectionView.backgroundView = label
         } else {
             collectionView.backgroundView = nil

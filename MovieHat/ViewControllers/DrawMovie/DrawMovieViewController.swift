@@ -47,6 +47,8 @@ final class DrawMovieViewController: UIViewController {
         movieTitleLabel.alpha = 0
         buttonStack.alpha = 0
 
+        applyTheme()
+
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTapBackground))
         dimmingView.addGestureRecognizer(tap)
 
@@ -206,12 +208,22 @@ final class DrawMovieViewController: UIViewController {
         rightLayer.add(pulse, forKey: "strobe")
     }
 
+    private func applyTheme() {
+        dimmingView.backgroundColor = Theme.dimmingOverlay
+        posterImageView.backgroundColor = Theme.drawMoviePosterPlaceholder
+        movieTitleLabel.textColor = Theme.invertedText
+        tryAgainButton.backgroundColor = Theme.secondaryButton
+        tryAgainButton.setTitleColor(.black, for: .normal)
+        letsGoButton.backgroundColor = Theme.primaryButton
+        letsGoButton.setTitleColor(Theme.invertedText, for: .normal)
+    }
+
     private func makeSpotlightLayer(bounds: CGRect) -> CAGradientLayer {
         let layer = CAGradientLayer()
         layer.type = .radial
         layer.colors = [
-            UIColor.white.withAlphaComponent(0.5).cgColor,
-            UIColor.white.withAlphaComponent(0.0).cgColor
+            Theme.spotlight.withAlphaComponent(0.5).cgColor,
+            Theme.spotlight.withAlphaComponent(0.0).cgColor
         ]
         layer.startPoint = CGPoint(x: 0.5, y: 0)
         layer.endPoint = CGPoint(x: 1.0, y: 1.0)

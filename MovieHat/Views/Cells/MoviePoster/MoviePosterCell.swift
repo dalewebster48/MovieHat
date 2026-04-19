@@ -10,6 +10,11 @@ final class MoviePosterCell: UICollectionViewCell {
         super.awakeFromNib()
         contentView.layer.cornerRadius = 12
         contentView.clipsToBounds = true
+        applyTheme()
+    }
+
+    private func applyTheme() {
+        posterImageView.backgroundColor = Theme.posterPlaceholder
     }
 
     func configure(with movie: Movie) {
@@ -17,7 +22,7 @@ final class MoviePosterCell: UICollectionViewCell {
             posterImageView.load(from: posterURL)
         } else {
             posterImageView.image = nil
-            posterImageView.backgroundColor = .systemGray4
+            posterImageView.backgroundColor = Theme.posterPlaceholder
         }
     }
 

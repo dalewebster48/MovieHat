@@ -28,15 +28,22 @@ final class ActionCardView: UIView {
     func configure(
         iconName: String,
         title: String,
-        subtitle: String,
-        cardBackgroundColor: UIColor,
-        iconTint: UIColor
+        subtitle: String
     ) {
-        backgroundColor = cardBackgroundColor
         iconImageView.image = UIImage(systemName: iconName)
-        iconImageView.tintColor = iconTint
         titleLabel.text = title
         subtitleLabel.text = subtitle
+    }
+
+    func applyTheme(
+        cardBackground: UIColor,
+        iconTint: UIColor
+    ) {
+        backgroundColor = cardBackground
+        iconImageView.tintColor = iconTint
+        iconCircle.backgroundColor = Theme.iconCircleBackground
+        titleLabel.textColor = Theme.primaryText
+        subtitleLabel.textColor = Theme.secondaryText
     }
 
     private func commonInit() {

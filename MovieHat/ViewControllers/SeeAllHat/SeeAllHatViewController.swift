@@ -20,6 +20,7 @@ final class SeeAllHatViewController: UIViewController {
         super.viewDidLoad()
 
         title = "All movies"
+        applyTheme()
 
         collectionView.register(
             UINib(nibName: "MoviePosterCell", bundle: nil),
@@ -30,6 +31,10 @@ final class SeeAllHatViewController: UIViewController {
 
         viewModel.viewDelegate = self
         viewModel.viewDidLoad()
+    }
+
+    private func applyTheme() {
+        view.backgroundColor = Theme.screenBackground
     }
 
     override func viewWillAppear(_ animated: Bool) {

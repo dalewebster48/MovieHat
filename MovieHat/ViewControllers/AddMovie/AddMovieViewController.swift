@@ -54,6 +54,8 @@ final class AddMovieViewController: UIViewController {
         statusLabel.font = .preferredFont(forTextStyle: .subheadline)
         statusLabel.isHidden = true
 
+        applyTheme()
+
         viewModel.viewDelegate = self
     }
 
@@ -67,6 +69,14 @@ final class AddMovieViewController: UIViewController {
         viewModel.searchQueryChanged(searchTextField.text ?? "")
     }
 
+    private func applyTheme() {
+        view.backgroundColor = Theme.posterGradient
+        titleLabel.textColor = Theme.primaryText
+        searchTextField.backgroundColor = Theme.searchFieldBackground
+        searchTextField.textColor = Theme.primaryText
+        statusLabel.textColor = Theme.secondaryText
+    }
+
     private func applyState() {
         switch state {
         case .idle(let message):
@@ -78,7 +88,7 @@ final class AddMovieViewController: UIViewController {
             label.text = message
             label.textAlignment = .center
             label.font = .preferredFont(forTextStyle: .subheadline)
-            label.textColor = .secondaryLabel
+            label.textColor = Theme.secondaryText
             label.numberOfLines = 0
             collectionView.backgroundView = label
 

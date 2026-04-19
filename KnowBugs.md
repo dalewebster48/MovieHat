@@ -1,4 +1,5 @@
 # Bugs
+- See all is visible on home screen when there are no movies
 - Dark mode is broken
 - Currently no filtering for movies / other types of media
 - Ugly gray square when loading images

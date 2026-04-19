@@ -19,8 +19,14 @@ final class GenrePickerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        applyTheme()
         viewModel.viewDelegate = self
         viewModel.viewDidLoad()
+    }
+
+    private func applyTheme() {
+        view.backgroundColor = Theme.posterGradient
+        titleLabel.textColor = Theme.primaryText
     }
 }
 
@@ -40,8 +46,8 @@ extension GenrePickerViewController: GenrePickerViewModelViewDelegate {
     private func makeGenreButton(title: String) -> UIButton {
         var config = UIButton.Configuration.filled()
         config.title = title
-        config.baseForegroundColor = .systemPurple
-        config.baseBackgroundColor = UIColor.systemPurple.withAlphaComponent(0.08)
+        config.baseForegroundColor = Theme.secondaryAccent
+        config.baseBackgroundColor = Theme.secondaryAccentBackground
         config.cornerStyle = .large
         config.contentInsets = NSDirectionalEdgeInsets(
             top: 16,

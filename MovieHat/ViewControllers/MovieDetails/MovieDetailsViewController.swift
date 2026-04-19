@@ -34,8 +34,13 @@ final class MovieDetailsViewController: UIViewController {
         super.viewDidLoad()
         scrollView.contentInsetAdjustmentBehavior = .never
         ctaButton.layer.cornerRadius = 12
-        gradientLayer.colors = [UIColor.systemBackground.withAlphaComponent(0).cgColor, UIColor.systemBackground.cgColor]
         posterGradientView.layer.addSublayer(gradientLayer)
+        applyTheme()
+
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: MovieDetailsViewController, _) in
+            self.updateGradientColors()
+        }
+
         viewModel.viewDelegate = self
     }
 
@@ -59,6 +64,28 @@ final class MovieDetailsViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    private func applyTheme() {
+        view.backgroundColor = Theme.posterGradient
+        titleLabel.textColor = Theme.primaryText
+        metadataLabel.textColor = Theme.secondaryText
+        ratingLabel.textColor = Theme.primaryText
+        plotLabel.textColor = Theme.primaryText
+        directorsLabel.textColor = Theme.secondaryText
+        writersLabel.textColor = Theme.secondaryText
+        starsLabel.textColor = Theme.secondaryText
+        errorLabel.textColor = Theme.secondaryText
+        ctaButton.setTitleColor(Theme.buttonText, for: .normal)
+        posterImageView.backgroundColor = Theme.secondaryBackground
+        updateGradientColors()
+    }
+
+    private func updateGradientColors() {
+        gradientLayer.colors = [
+            Theme.posterGradient.withAlphaComponent(0).cgColor,
+            Theme.posterGradient.cgColor
+        ]
     }
 
     private func applyLoading() {
@@ -91,7 +118,7 @@ final class MovieDetailsViewController: UIViewController {
         
         ctaButton.isHidden = !viewModel.shouldShowCta
         ctaButton.setTitle(viewModel.ctaLabel, for: .normal)
-        ctaButton.backgroundColor = viewModel.isCtaDestructive ? .systemRed.withAlphaComponent(0.7) : .systemBlue.withAlphaComponent(0.7)
+        ctaButton.backgroundColor = viewModel.isCtaDestructive ? Theme.destructiveButton : Theme.primaryButton
     }
 
     private func applyError(_ message: String) {
