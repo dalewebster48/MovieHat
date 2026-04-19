@@ -37,6 +37,10 @@ final class HomeViewModel {
         movies.isEmpty ? "No movies in the hat yet.\nTap the search icon to add some!" : nil
     }
     
+    var shouldShowSeeAllButton: Bool {
+        !movies.isEmpty
+    }
+    
     init(movieHatService: any MovieHatService, navigator: any Navigator) {
         self.movieHatService = movieHatService
         self.navigator = navigator

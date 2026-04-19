@@ -133,6 +133,8 @@ extension HomeViewController: HomeViewModelViewDelegate {
             collectionView.backgroundView = nil
         }
 
+        seeAllButton.isHidden = !viewModel.shouldShowSeeAllButton
+        
         collectionView.reloadData()
     }
 
