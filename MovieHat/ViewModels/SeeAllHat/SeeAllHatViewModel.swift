@@ -10,10 +10,12 @@ protocol SeeAllHatViewModelProtocol: AnyObject {
 
     func viewDidLoad()
     func didSelectMovie(at index: Int)
+    func provideImageCacheService() -> any ImageCacheService
 }
 
 final class SeeAllHatViewModel: SeeAllHatViewModelProtocol {
     private let movieHatService: any MovieHatService
+    private let imageCacheService: any ImageCacheService
     private let navigator: any Navigator
 
     var movies: [Movie] = [] {
@@ -24,12 +26,18 @@ final class SeeAllHatViewModel: SeeAllHatViewModelProtocol {
 
     init(
         movieHatService: any MovieHatService,
+        imageCacheService: any ImageCacheService,
         navigator: any Navigator
     ) {
         self.movieHatService = movieHatService
+        self.imageCacheService = imageCacheService
         self.navigator = navigator
 
         self.movieHatService.addConsumer(self)
+    }
+
+    func provideImageCacheService() -> any ImageCacheService {
+        imageCacheService
     }
 
     func viewDidLoad() {

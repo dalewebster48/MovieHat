@@ -10,13 +10,18 @@ final class ViewModelFactory {
     }
 
     func makeHomeViewModel() -> HomeViewModel {
-        HomeViewModel(movieHatService: services.movieHatService, navigator: navigator)
+        HomeViewModel(
+            movieHatService: services.movieHatService,
+            imageCacheService: services.imageCacheService,
+            navigator: navigator
+        )
     }
 
     func makeAddMovieViewModel() -> AddMovieViewModel {
         AddMovieViewModel(
             movieSearchService: services.movieSearchService,
             movieHatService: services.movieHatService,
+            imageCacheService: services.imageCacheService,
             navigator: navigator,
             viewModelFactory: self
         )
@@ -41,6 +46,7 @@ final class ViewModelFactory {
             movieId: movieId,
             movieSearchService: services.movieSearchService,
             movieHatService: services.movieHatService,
+            imageCacheService: services.imageCacheService,
             navigator: navigator
         )
     }
@@ -48,6 +54,7 @@ final class ViewModelFactory {
     func makeSeeAllHatViewModel() -> SeeAllHatViewModel {
         SeeAllHatViewModel(
             movieHatService: services.movieHatService,
+            imageCacheService: services.imageCacheService,
             navigator: navigator
         )
     }
@@ -55,6 +62,7 @@ final class ViewModelFactory {
     func makeDrawMovieViewModel(genre: String? = nil) -> DrawMovieViewModel {
         DrawMovieViewModel(
             movieHatService: services.movieHatService,
+            imageCacheService: services.imageCacheService,
             navigator: navigator,
             genre: genre
         )

@@ -85,7 +85,7 @@ final class DrawMovieViewController: UIViewController {
     private func startRevealSequence(for movie: Movie) {
         movieTitleLabel.text = movie.title
         if let posterURL = movie.posterURL {
-            posterImageView.load(from: posterURL)
+            posterImageView.load(from: posterURL, imageCache: viewModel.provideImageCacheService())
         }
         resetPosterPosition()
         startDrumroll()

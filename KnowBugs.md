@@ -1,5 +1,4 @@
 # Bugs
-- Currently no filtering for movies / other types of media
 - Ugly gray square when loading images
 
 # Missing features
@@ -18,6 +17,7 @@
 - Create a color palette for consistent themeing
 
 # Fixed
+- Currently no filtering for movies / other types of media
 - See all is visible on home screen when there are no movies
 - Dark mode is broken
 - Genres just not working

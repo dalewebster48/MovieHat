@@ -65,7 +65,7 @@ extension SeeAllHatViewController: UICollectionViewDataSource {
             withReuseIdentifier: MoviePosterCell.reuseIdentifier,
             for: indexPath
         ) as! MoviePosterCell
-        cell.configure(with: viewModel.movies[indexPath.item])
+        cell.configure(with: viewModel.movies[indexPath.item], imageCache: viewModel.provideImageCacheService())
         return cell
     }
 }

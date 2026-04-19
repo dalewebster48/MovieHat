@@ -24,7 +24,10 @@ final class MovieSearchResultCell: UICollectionViewCell {
         ratingLabel.textColor = Theme.ratingText
     }
 
-    func configure(with viewModel: MovieSearchResultViewModel) {
+    func configure(
+        with viewModel: MovieSearchResultViewModel,
+        imageCache: any ImageCacheService
+    ) {
         titleLabel.text = viewModel.title
         detailLabel.text = viewModel.year
         genresLabel.isHidden = true
@@ -32,7 +35,7 @@ final class MovieSearchResultCell: UICollectionViewCell {
         ratingLabel.isHidden = viewModel.rating == nil
 
         if let posterURL = viewModel.posterURL {
-            posterImageView.load(from: posterURL)
+            posterImageView.load(from: posterURL, imageCache: imageCache)
         }
     }
 

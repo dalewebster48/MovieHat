@@ -55,6 +55,12 @@ final class DatabaseProvider: Sendable {
             )
         })
 
+        try db.run(ImageCacheTable.table.create(ifNotExists: true) { t in
+            t.column(ImageCacheTable.url, primaryKey: true)
+            t.column(ImageCacheTable.diskPath)
+            t.column(ImageCacheTable.createdAt)
+        })
+
         try db.run("PRAGMA foreign_keys = ON")
     }
 }
@@ -90,4 +96,11 @@ enum MovieGenresTable {
     static let table = Table("movie_genres")
     static let movieId = SQLite.Expression<String>("movieId")
     static let genreId = SQLite.Expression<Int64>("genreId")
+}
+
+enum ImageCacheTable {
+    static let table = Table("image_cache")
+    static let url = SQLite.Expression<String>("url")
+    static let diskPath = SQLite.Expression<String>("diskPath")
+    static let createdAt = SQLite.Expression<Date>("createdAt")
 }

@@ -17,9 +17,12 @@ final class MoviePosterCell: UICollectionViewCell {
         posterImageView.backgroundColor = Theme.posterPlaceholder
     }
 
-    func configure(with movie: Movie) {
+    func configure(
+        with movie: Movie,
+        imageCache: any ImageCacheService
+    ) {
         if let posterURL = movie.posterURL {
-            posterImageView.load(from: posterURL)
+            posterImageView.load(from: posterURL, imageCache: imageCache)
         } else {
             posterImageView.image = nil
             posterImageView.backgroundColor = Theme.posterPlaceholder

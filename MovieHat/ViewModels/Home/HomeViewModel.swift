@@ -7,6 +7,7 @@ protocol HomeViewModelViewDelegate: AnyObject {
 
 final class HomeViewModel {
     private let movieHatService: any MovieHatService
+    private let imageCacheService: any ImageCacheService
     private let navigator: any Navigator
     private(set) var movies: [Movie] = [] {
         didSet {
@@ -41,11 +42,20 @@ final class HomeViewModel {
         !movies.isEmpty
     }
     
-    init(movieHatService: any MovieHatService, navigator: any Navigator) {
+    init(
+        movieHatService: any MovieHatService,
+        imageCacheService: any ImageCacheService,
+        navigator: any Navigator
+    ) {
         self.movieHatService = movieHatService
+        self.imageCacheService = imageCacheService
         self.navigator = navigator
         
         self.movieHatService.addConsumer(self)
+    }
+
+    func provideImageCacheService() -> any ImageCacheService {
+        imageCacheService
     }
 
     func viewDidLoad() {

@@ -5,11 +5,12 @@ protocol MovieDetailViewModelProtocol: AnyObject {
     var shouldShowCta: Bool { get }
     var ctaLabel: String { get }
     var isCtaDestructive: Bool { get }
-    
+
     var viewDelegate: (any MovieDetailsViewModelViewDelegate)? { get set }
-    
+
     func viewWillAppear()
     func didTapCta()
+    func provideImageCacheService() -> any ImageCacheService
 }
 
 protocol MovieDetailsViewModelViewDelegate: AnyObject {
@@ -29,6 +30,7 @@ final class MovieDetailsViewModel: MovieDetailViewModelProtocol {
     private let movieId: String
     private let movieSearchService: any MovieSearchService
     private let movieHatService: any MovieHatService
+    private let imageCacheService: any ImageCacheService
     private let navigator: any Navigator
     private var movie: Movie?
 
@@ -46,14 +48,20 @@ final class MovieDetailsViewModel: MovieDetailViewModelProtocol {
         movieId: String,
         movieSearchService: any MovieSearchService,
         movieHatService: any MovieHatService,
+        imageCacheService: any ImageCacheService,
         navigator: any Navigator
     ) {
         self.movieId = movieId
         self.movieSearchService = movieSearchService
         self.movieHatService = movieHatService
+        self.imageCacheService = imageCacheService
         self.navigator = navigator
         
         self.movieHatService.addConsumer(self)
+    }
+
+    func provideImageCacheService() -> any ImageCacheService {
+        imageCacheService
     }
 
     func viewWillAppear() {

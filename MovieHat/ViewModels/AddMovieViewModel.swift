@@ -7,6 +7,7 @@ protocol AddMovieViewModelViewDelegate: AnyObject {
 final class AddMovieViewModel {
     private let movieSearchService: any MovieSearchService
     private let movieHatService: any MovieHatService
+    private let imageCacheService: any ImageCacheService
     private let navigator: any Navigator
     private let viewModelFactory: ViewModelFactory
     private var searchTask: Task<Void, Never>?
@@ -36,13 +37,19 @@ final class AddMovieViewModel {
     init(
         movieSearchService: any MovieSearchService,
         movieHatService: any MovieHatService,
+        imageCacheService: any ImageCacheService,
         navigator: any Navigator,
         viewModelFactory: ViewModelFactory
     ) {
         self.movieSearchService = movieSearchService
         self.movieHatService = movieHatService
+        self.imageCacheService = imageCacheService
         self.navigator = navigator
         self.viewModelFactory = viewModelFactory
+    }
+
+    func provideImageCacheService() -> any ImageCacheService {
+        imageCacheService
     }
 
     func viewWillAppear() {

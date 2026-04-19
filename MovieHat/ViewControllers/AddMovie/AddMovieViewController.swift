@@ -160,7 +160,7 @@ extension AddMovieViewController: UICollectionViewDataSource {
             withReuseIdentifier: MovieSearchResultCell.reuseIdentifier,
             for: indexPath
         ) as! MovieSearchResultCell
-        cell.configure(with: results[indexPath.item])
+        cell.configure(with: results[indexPath.item], imageCache: viewModel.provideImageCacheService())
         return cell
     }
 }

@@ -12,10 +12,12 @@ protocol DrawMovieViewModelProtocol: AnyObject {
     func didTapTryAgain()
     func didTapLetsGo()
     func didTapDismiss()
+    func provideImageCacheService() -> any ImageCacheService
 }
 
 final class DrawMovieViewModel: DrawMovieViewModelProtocol {
     private let movieHatService: any MovieHatService
+    private let imageCacheService: any ImageCacheService
     private let navigator: any Navigator
     private let genre: String?
 
@@ -27,12 +29,18 @@ final class DrawMovieViewModel: DrawMovieViewModelProtocol {
 
     init(
         movieHatService: any MovieHatService,
+        imageCacheService: any ImageCacheService,
         navigator: any Navigator,
         genre: String? = nil
     ) {
         self.movieHatService = movieHatService
+        self.imageCacheService = imageCacheService
         self.navigator = navigator
         self.genre = genre
+    }
+
+    func provideImageCacheService() -> any ImageCacheService {
+        imageCacheService
     }
 
     func viewDidAppear() {

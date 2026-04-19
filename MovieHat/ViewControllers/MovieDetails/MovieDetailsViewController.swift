@@ -101,7 +101,7 @@ final class MovieDetailsViewController: UIViewController {
         errorLabel.isHidden = true
 
         if let posterURL = model.posterURL {
-            posterImageView.load(from: posterURL)
+            posterImageView.load(from: posterURL, imageCache: viewModel.provideImageCacheService())
         }
         titleLabel.text = model.title
         metadataLabel.text = model.metadata
