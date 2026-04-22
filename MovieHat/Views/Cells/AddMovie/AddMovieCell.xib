@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AddMovieCell" id="ce1" customClass="AddMovieCell" customModule="MovieHat" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="231" height="276"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="231" height="276"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iv1">
+                        <rect key="frame" x="105.66666666666667" y="116" width="20" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="h01"/>
+                            <constraint firstAttribute="width" constant="20" id="w01"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Movie" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lb1">
+                        <rect key="frame" x="0.0" y="152" width="231" height="14.333333333333343"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="iv1" firstAttribute="centerX" secondItem="ce1" secondAttribute="centerX" id="cx1"/>
+                <constraint firstItem="iv1" firstAttribute="centerY" secondItem="ce1" secondAttribute="centerY" constant="-12" id="cy1"/>
+                <constraint firstItem="lb1" firstAttribute="leading" secondItem="ce1" secondAttribute="leading" id="l01"/>
+                <constraint firstAttribute="trailing" secondItem="lb1" secondAttribute="trailing" id="r01"/>
+                <constraint firstItem="lb1" firstAttribute="top" secondItem="iv1" secondAttribute="bottom" constant="16" id="t01"/>
+            </constraints>
+            <size key="customSize" width="231" height="276"/>
+            <connections>
+                <outlet property="iconImageView" destination="iv1" id="c01"/>
+                <outlet property="titleLabel" destination="lb1" id="c02"/>
+            </connections>
+            <point key="canvasLocation" x="57.251908396946561" y="177.46478873239437"/>
+        </collectionViewCell>
+    </objects>
+</document>

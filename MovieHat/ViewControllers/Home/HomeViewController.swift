@@ -32,6 +32,10 @@ final class HomeViewController: UIViewController {
         super.viewDidLoad()
 
         collectionView.register(
+            UINib(nibName: "AddMovieCell", bundle: nil),
+            forCellWithReuseIdentifier: AddMovieCell.reuseIdentifier
+        )
+        collectionView.register(
             UINib(nibName: "MoviePosterCell", bundle: nil),
             forCellWithReuseIdentifier: MoviePosterCell.reuseIdentifier
         )
@@ -121,18 +125,6 @@ extension HomeViewController: HomeViewModelViewDelegate {
         pullCard.isDisabled = viewModel.isDrawDisabled
         genreCard.isDisabled = viewModel.isGenreDisabled
 
-        if let message = viewModel.emptyStateMessage {
-            let label = UILabel()
-            label.text = message
-            label.textAlignment = .center
-            label.numberOfLines = 0
-            label.font = .preferredFont(forTextStyle: .subheadline)
-            label.textColor = Theme.secondaryText
-            collectionView.backgroundView = label
-        } else {
-            collectionView.backgroundView = nil
-        }
-
         seeAllButton.isHidden = !viewModel.shouldShowSeeAllButton
         
         collectionView.reloadData()
@@ -149,7 +141,7 @@ extension HomeViewController: UICollectionViewDelegate {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        viewModel.didSelectMovie(at: indexPath.item)
+        viewModel.didSelectItem(at: indexPath.item)
     }
 }
 
@@ -158,18 +150,31 @@ extension HomeViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        viewModel.movies.count
+        viewModel.collectionItemCount
     }
 
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: MoviePosterCell.reuseIdentifier,
-            for: indexPath
-        ) as! MoviePosterCell
-        cell.configure(with: viewModel.movies[indexPath.item], imageCache: viewModel.provideImageCacheService())
-        return cell
+        let cellType = viewModel.cellType(at: indexPath.item)
+
+        switch cellType {
+        case .addMovie:
+            return collectionView.dequeueReusableCell(
+                withReuseIdentifier: AddMovieCell.reuseIdentifier,
+                for: indexPath
+            )
+        case .movie(let movie):
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: MoviePosterCell.reuseIdentifier,
+                for: indexPath
+            ) as! MoviePosterCell
+            cell.configure(
+                with: movie,
+                imageCache: viewModel.provideImageCacheService()
+            )
+            return cell
+        }
     }
 }

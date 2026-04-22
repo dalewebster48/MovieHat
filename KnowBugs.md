@@ -1,13 +1,18 @@
 # Aspirations
 - Connect with LetterBoxed API so people can leave reviews of movies they've watched
 - More info about movie that's picked from the hat
+- Add to be reviewed/letterboxed/seen this month. Some kind of state update for after drawing movies from the hat
 
-# 1.1
-- Can click on movie drawn from hat
-- Adding movie straight from search results
+# 1.2
 - Share drawn movie on instagram
 - Ads
 - In App purchase to permanently remove the ads
+
+# 1.1
+- Adding movie straight from search results
+- Can click on movie drawn from hat
+- Make it more obvious how to add things when you open the app
+- Let's go isn't clear - what happens when you click that button?
 
 # 1.0
 - Done

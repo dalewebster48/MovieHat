@@ -1,5 +1,10 @@
 import UIKit
 
+enum HomeCellType {
+    case addMovie
+    case movie(Movie)
+}
+
 protocol HomeViewModelViewDelegate: AnyObject {
     func bind(viewModel: HomeViewModel)
     func hatImageInfo() -> (frame: CGRect, image: UIImage?)
@@ -34,10 +39,6 @@ final class HomeViewModel {
         movies.isEmpty
     }
 
-    var emptyStateMessage: String? {
-        movies.isEmpty ? "No movies in the hat yet.\nTap the search icon to add some!" : nil
-    }
-    
     var shouldShowSeeAllButton: Bool {
         !movies.isEmpty
     }
@@ -66,9 +67,27 @@ final class HomeViewModel {
         navigator.navigate(.modal(.addMovie))
     }
 
-    func didSelectMovie(at index: Int) {
-        guard index < movies.count else { return }
-        navigator.navigate(.push(.movieDetailsPreloaded(movie: movies[index])))
+    static let ADD_MOVIE_CELL_INDEX = 0
+
+    var collectionItemCount: Int {
+        movies.count + 1
+    }
+
+    func cellType(at index: Int) -> HomeCellType {
+        if index == Self.ADD_MOVIE_CELL_INDEX {
+            return .addMovie
+        }
+        return .movie(movies[index - 1])
+    }
+
+    func didSelectItem(at index: Int) {
+        if index == Self.ADD_MOVIE_CELL_INDEX {
+            navigator.navigate(.modal(.addMovie))
+            return
+        }
+        let movieIndex = index - 1
+        guard movieIndex < movies.count else { return }
+        navigator.navigate(.push(.movieDetailsPreloaded(movie: movies[movieIndex])))
     }
     
     func didTapDrawMovie() {
