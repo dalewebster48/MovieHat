@@ -1,6 +1,6 @@
 import Foundation
 
-struct Movie: Identifiable {
+struct Movie: Identifiable, Hashable {
     let id: String
     let type: String?
     let title: String

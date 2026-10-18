@@ -1,151 +1,108 @@
 import Foundation
 
-protocol MovieDetailViewModelProtocol: AnyObject {
+@MainActor
+protocol MovieDetailsViewModelProtocol: AnyObject, Observable {
     var state: MovieDetailsViewModel.State { get }
+    var inHatLabel: String { get }
+    var backAccessibilityLabel: String { get }
+    var isInHat: Bool { get }
     var shouldShowCta: Bool { get }
-    var ctaLabel: String { get }
+    var ctaTitle: String { get }
     var isCtaDestructive: Bool { get }
+    var imageCache: any ImageCacheService { get }
 
-    var viewDelegate: (any MovieDetailsViewModelViewDelegate)? { get set }
-
-    func viewWillAppear()
+    func onAppear()
+    func didTapBack()
     func didTapCta()
-    func provideImageCacheService() -> any ImageCacheService
 }
 
-protocol MovieDetailsViewModelViewDelegate: AnyObject {
-    func bind(viewModel: MovieDetailsViewModel)
-}
-
-final class MovieDetailsViewModel: MovieDetailViewModelProtocol {
-    private static let CTA_ADD_LABEL = "Add to hat!"
-    private static let CTA_REMOVE_LABEL = "Remove from hat"
-    
+@Observable @MainActor
+final class MovieDetailsViewModel: MovieDetailsViewModelProtocol {
     enum State {
         case loading
         case loaded(MovieDetailModel)
         case error(String)
     }
 
-    private let movieId: String
-    private let movieSearchService: any MovieSearchService
-    private let movieHatService: any MovieHatService
-    private let imageCacheService: any ImageCacheService
-    private let navigator: any Navigator
+    @ObservationIgnored private let movieId: String
+    @ObservationIgnored private let movieSearchService: any MovieSearchService
+    @ObservationIgnored private let movieHatService: any MovieHatService
+    @ObservationIgnored private let navigator: any Navigator
+    @ObservationIgnored let imageCache: any ImageCacheService
+    @ObservationIgnored private var hasLoaded = false
+
+    let inHatLabel = "In your hat"
+    let backAccessibilityLabel = "Back"
+
+    var state: State = .loading
+    var isInHat = false
     private var movie: Movie?
 
-    var state: State = .loading {
-        didSet { bind() }
+    var shouldShowCta: Bool {
+        if case .loaded = state { return true }
+        return false
     }
 
-    var shouldShowCta = false
-    var ctaLabel: String = MovieDetailsViewModel.CTA_ADD_LABEL
-    var isCtaDestructive = false
-
-    weak var viewDelegate: (any MovieDetailsViewModelViewDelegate)?
+    var ctaTitle: String { isInHat ? "Take out of the hat" : "Add to the hat" }
+    var isCtaDestructive: Bool { isInHat }
 
     init(
         movieId: String,
+        movie: Movie? = nil,
         movieSearchService: any MovieSearchService,
         movieHatService: any MovieHatService,
         imageCacheService: any ImageCacheService,
         navigator: any Navigator
     ) {
         self.movieId = movieId
-        self.movieSearchService = movieSearchService
-        self.movieHatService = movieHatService
-        self.imageCacheService = imageCacheService
-        self.navigator = navigator
-
-        self.movieHatService.addConsumer(self)
-    }
-
-    init(
-        movie: Movie,
-        movieSearchService: any MovieSearchService,
-        movieHatService: any MovieHatService,
-        imageCacheService: any ImageCacheService,
-        navigator: any Navigator
-    ) {
-        self.movieId = movie.id
         self.movie = movie
         self.movieSearchService = movieSearchService
         self.movieHatService = movieHatService
-        self.imageCacheService = imageCacheService
+        self.imageCache = imageCacheService
         self.navigator = navigator
-
-        self.movieHatService.addConsumer(self)
     }
 
-    func provideImageCacheService() -> any ImageCacheService {
-        imageCacheService
+    func onAppear() {
+        movieHatService.addConsumer(self)
+        guard !hasLoaded else { return }
+        hasLoaded = true
+        load()
     }
 
-    func viewWillAppear() {
-        if let movie {
-            loadPreloadedMovie(movie)
-        } else {
-            loadMovie()
-        }
+    func didTapBack() {
+        navigator.pop()
     }
-    
+
     func didTapCta() {
-        switch state {
-        case .loading, .error: return
-        case .loaded:
-            Task {
-                do {
-                    if isCtaDestructive {
-                        // Remove movie from hat
-                        try await movieHatService.removeMovieFromHat(id: movieId)
-                    } else {
-                        // Add movie to hat
-                        try await movieHatService.addMovie(movie!)
-                    }
-                } catch {
-                    print("Error adding movie to hat", error.localizedDescription)
+        guard let movie else { return }
+        Task {
+            do {
+                if isInHat {
+                    try await movieHatService.removeMovieFromHat(id: movieId)
+                } else {
+                    try await movieHatService.addMovie(movie)
                 }
+            } catch {
+                print("Failed to update hat: \(error)")
             }
         }
     }
-    
-    private func loadPreloadedMovie(_ movie: Movie) {
+
+    private func load() {
         Task {
             do {
-                let isInHat = try await movieHatService.containsMovie(id: movieId)
-                updateCta(isInHat: isInHat)
+                isInHat = try await movieHatService.containsMovie(id: movieId)
+                let movie: Movie
+                if let preloaded = self.movie {
+                    movie = preloaded
+                } else {
+                    movie = try await movieSearchService.getMovie(id: movieId)
+                    self.movie = movie
+                }
                 state = .loaded(MovieDetailModel(movie: movie))
             } catch {
-                state = .error(error.localizedDescription)
+                state = .error("Couldn’t load this movie. Check your connection and try again.")
             }
-        }
-    }
-
-    private func loadMovie() {
-        Task {
-            do {
-                let isInhat = try await movieHatService.containsMovie(id: movieId)
-                updateCta(isInHat: isInhat)
-                
-                self.movie = try await movieSearchService.getMovie(id: movieId)
-                state = .loaded(MovieDetailModel(movie: movie!))
-            } catch {
-                state = .error(error.localizedDescription)
-            }
-        }
-    }
-    
-    private func updateCta(isInHat: Bool) {
-        shouldShowCta = true
-        isCtaDestructive = isInHat
-        ctaLabel = isInHat ? MovieDetailsViewModel.CTA_REMOVE_LABEL : MovieDetailsViewModel.CTA_ADD_LABEL
-        
-        bind()
-    }
-    
-    private func bind() {
-        Task { @MainActor in
-            viewDelegate?.bind(viewModel: self)
         }
     }
 }
@@ -153,13 +110,11 @@ final class MovieDetailsViewModel: MovieDetailViewModelProtocol {
 extension MovieDetailsViewModel: MovieHatServiceConsumer {
     func movieWasAddedToHat(movieHatService: any MovieHatService, id: String) {
         guard id == movieId else { return }
-        
-        updateCta(isInHat: true)
+        isInHat = true
     }
-    
+
     func movieWasRemovedFromHat(movieHatService: any MovieHatService, id: String) {
         guard id == movieId else { return }
-        
-        updateCta(isInHat: false)
+        isInHat = false
     }
 }

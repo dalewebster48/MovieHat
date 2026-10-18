@@ -5,6 +5,7 @@ final class ServicesContainer {
     let movieSearchService: any MovieSearchService
     let genreService: any GenreService
     let imageCacheService: any ImageCacheService
+    let soundService: any SoundService
 
     init(dataAccess: any DataAccessContainer) {
         self.movieHatService = MovieHatServiceImpl(movieHatRepository: dataAccess.movieHatRepository)
@@ -14,5 +15,6 @@ final class ServicesContainer {
             imageCacheRepository: dataAccess.imageCacheRepository,
             cacheRepository: dataAccess.cacheRepository
         )
+        self.soundService = SoundServiceImpl()
     }
 }

@@ -1,86 +1,116 @@
 import Foundation
 
-protocol DrawMovieViewModelViewDelegate: AnyObject {
-    func bind(viewModel: any DrawMovieViewModelProtocol)
+@MainActor
+protocol DrawMovieViewModelProtocol: AnyObject, Observable {
+    var phase: DrawMovieViewModel.Phase { get }
+    var eyebrow: String { get }
+    var drawAgainTitle: String { get }
+    var watchTitle: String { get }
+    var closeAccessibilityLabel: String { get }
+    var emptyMessage: String { get }
+    var movieTitle: String { get }
+    var movieMetadata: String { get }
+    var posterURL: URL? { get }
+    var imageCache: any ImageCacheService { get }
+
+    func onAppear()
+    func didTapDrawAgain()
+    func didTapWatch()
+    func didTapClose()
 }
 
-protocol DrawMovieViewModelProtocol: AnyObject {
-    var drawnMovie: Movie? { get }
-    var viewDelegate: (any DrawMovieViewModelViewDelegate)? { get set }
-
-    func viewDidAppear()
-    func didTapTryAgain()
-    func didTapLetsGo()
-    func didTapDismiss()
-    func provideImageCacheService() -> any ImageCacheService
-}
-
+@Observable @MainActor
 final class DrawMovieViewModel: DrawMovieViewModelProtocol {
-    private let movieHatService: any MovieHatService
-    private let imageCacheService: any ImageCacheService
-    private let navigator: any Navigator
-    private let genre: String?
-
-    weak var viewDelegate: (any DrawMovieViewModelViewDelegate)?
-
-    var drawnMovie: Movie? {
-        didSet { bind() }
+    enum Phase: Equatable {
+        /// Nothing drawn yet, or the last draw is fading out before the next one.
+        case hidden
+        /// Spotlights sweep while the drumroll plays.
+        case drumroll
+        /// The poster has risen out of the hat.
+        case revealed
+        /// Nothing in the hat matches.
+        case empty
     }
+
+    static let drumrollDuration: TimeInterval = 2
+    private static let resetDuration: TimeInterval = 0.3
+
+    @ObservationIgnored private let movieHatService: any MovieHatService
+    @ObservationIgnored private let soundService: any SoundService
+    @ObservationIgnored private let navigator: any Navigator
+    @ObservationIgnored private let genre: String?
+    @ObservationIgnored let imageCache: any ImageCacheService
+    @ObservationIgnored private var hasStarted = false
+
+    let eyebrow = "The hat has spoken"
+    let drawAgainTitle = "Draw again"
+    let watchTitle = "Watch this"
+    let closeAccessibilityLabel = "Close"
+
+    var phase: Phase = .hidden
+    private var movie: Movie?
+
+    var emptyMessage: String {
+        if let genre { return "No \(genre) movies in the hat." }
+        return "The hat is empty."
+    }
+
+    var movieTitle: String { movie?.title ?? "" }
+    var movieMetadata: String { movie.map(MovieDetailModel.formatMetadata) ?? "" }
+    var posterURL: URL? { movie?.posterURL }
 
     init(
         movieHatService: any MovieHatService,
+        soundService: any SoundService,
         imageCacheService: any ImageCacheService,
         navigator: any Navigator,
-        genre: String? = nil
+        genre: String?
     ) {
         self.movieHatService = movieHatService
-        self.imageCacheService = imageCacheService
+        self.soundService = soundService
+        self.imageCache = imageCacheService
         self.navigator = navigator
         self.genre = genre
     }
 
-    func provideImageCacheService() -> any ImageCacheService {
-        imageCacheService
+    func onAppear() {
+        guard !hasStarted else { return }
+        hasStarted = true
+        draw()
     }
 
-    func viewDidAppear() {
-        drawMovie()
-    }
-
-    func didTapTryAgain() {
-        drawMovie()
-    }
-
-    func didTapLetsGo() {
-        guard let movie = drawnMovie else { return }
+    func didTapDrawAgain() {
+        guard phase == .revealed else { return }
         Task {
-            try? await movieHatService.removeMovieFromHat(id: movie.id)
-            await MainActor.run {
-                navigator.dismiss()
-            }
+            phase = .hidden
+            try? await Task.sleep(for: .seconds(Self.resetDuration))
+            draw()
         }
     }
 
-    func didTapDismiss() {
+    func didTapWatch() {
+        guard let movie else { return }
+        Task {
+            try? await movieHatService.removeMovieFromHat(id: movie.id)
+            navigator.dismiss()
+        }
+    }
+
+    func didTapClose() {
         navigator.dismiss()
     }
 
-    private func drawMovie() {
+    private func draw() {
         Task {
-            do {
-                let movie = try await movieHatService.drawRandomMovie(genre: genre)
-                await MainActor.run {
-                    drawnMovie = movie
-                }
-            } catch {
-                print("Failed to draw movie: \(error)")
+            guard let movie = try? await movieHatService.drawRandomMovie(genre: genre) else {
+                phase = .empty
+                return
             }
-        }
-    }
-
-    private func bind() {
-        Task { @MainActor in
-            viewDelegate?.bind(viewModel: self)
+            self.movie = movie
+            phase = .drumroll
+            soundService.playDrumroll()
+            try? await Task.sleep(for: .seconds(Self.drumrollDuration))
+            phase = .revealed
         }
     }
 }

@@ -19,13 +19,13 @@ MovieHat is a family movie night app. Multiple users in a family can share a "ha
 - `MovieSearchService` / `MovieSearchServiceImpl` — search service layer.
 - `MovieHatService` / `MovieHatServiceImpl` — hat operations (add, list, draw random).
 
-## Navigation
+## UI (SwiftUI)
 
-- Navigation uses two enums in `App/AppDestination.swift`: `NavigationRoute` (the destination) and `NavigationAction` (how to get there).
-- `NavigationAction` has `.modal(NavigationRoute)` and `.push(NavigationRoute)` cases, separating "where" from "how".
-- `Navigator` protocol exposes `navigate(_ action: NavigationAction)` and `dismiss(completion:)`.
-- `AppNavigator` handles `.modal` by wrapping the VC in a `UINavigationController`, presenting it, and updating `presentedNavigationController`. Handles `.push` by pushing onto the current `presentedNavigationController`.
-- Route-to-ViewController mapping lives in `AppNavigator.makeViewController(for:)`, which delegates to `ViewControllerFactory`.
+- `@main MovieHatApp` holds `AppContext`, which builds the home ViewModel once and hands it to `RootView`.
+- `AppNavigator` is `@Observable` state: `path`, `modal` + `modalPath` (sheet with its own stack), and `overlay`.
+- `NavigationRoute` (push/modal screens) and `OverlayRoute` (full-screen overlays above the stack) live in `App/AppDestination.swift`. `NavigationAction` is `.push`, `.modal` or `.overlay`.
+- The draw-movie reveal is an overlay, not a sheet, so the hat can fly from the home screen via `matchedGeometryEffect` (`HatImage`, namespace owned by `RootView`).
+- `ViewFactory` maps routes to views. Design: "Stage & crimson" — colours in `Theme`, fonts (Bricolage Grotesque, Figtree) in `Theme/Typography.swift`, bundled in `Resources/Fonts`.
 
 ## Future Plans
 

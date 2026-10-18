@@ -1,10 +1,14 @@
 import Foundation
 
+@MainActor
 final class ViewModelFactory {
     private let services: ServicesContainer
     private let navigator: any Navigator
 
-    init(services: ServicesContainer, navigator: any Navigator) {
+    init(
+        services: ServicesContainer,
+        navigator: any Navigator
+    ) {
         self.services = services
         self.navigator = navigator
     }
@@ -12,6 +16,7 @@ final class ViewModelFactory {
     func makeHomeViewModel() -> HomeViewModel {
         HomeViewModel(
             movieHatService: services.movieHatService,
+            genreService: services.genreService,
             imageCacheService: services.imageCacheService,
             navigator: navigator
         )
@@ -23,21 +28,7 @@ final class ViewModelFactory {
             movieHatService: services.movieHatService,
             imageCacheService: services.imageCacheService,
             navigator: navigator,
-            viewModelFactory: self
-        )
-    }
-
-    func makeMovieSearchResultViewModel(movie: MovieSearchResult) -> MovieSearchResultViewModel {
-        MovieSearchResultViewModel(movie: movie)
-    }
-
-    func makeGenrePickerViewModel(
-        onGenreSelected: @escaping (String) -> Void
-    ) -> GenrePickerViewModel {
-        GenrePickerViewModel(
-            genreService: services.genreService,
-            navigator: navigator,
-            onGenreSelected: onGenreSelected
+            resultFactory: self
         )
     }
 
@@ -53,6 +44,7 @@ final class ViewModelFactory {
 
     func makeMovieDetailsViewModel(movie: Movie) -> MovieDetailsViewModel {
         MovieDetailsViewModel(
+            movieId: movie.id,
             movie: movie,
             movieSearchService: services.movieSearchService,
             movieHatService: services.movieHatService,
@@ -69,12 +61,22 @@ final class ViewModelFactory {
         )
     }
 
-    func makeDrawMovieViewModel(genre: String? = nil) -> DrawMovieViewModel {
+    func makeDrawMovieViewModel(genre: String?) -> DrawMovieViewModel {
         DrawMovieViewModel(
             movieHatService: services.movieHatService,
+            soundService: services.soundService,
             imageCacheService: services.imageCacheService,
             navigator: navigator,
             genre: genre
         )
+    }
+}
+
+extension ViewModelFactory: MovieSearchResultViewModelFactory {
+    func makeMovieSearchResultViewModel(
+        movie: MovieSearchResult,
+        isInHat: Bool
+    ) -> MovieSearchResultViewModel {
+        MovieSearchResultViewModel(movie: movie, isInHat: isInHat)
     }
 }

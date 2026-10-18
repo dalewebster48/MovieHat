@@ -1,99 +1,53 @@
-import UIKit
+import SwiftUI
 
-final class AppNavigator: NSObject, Navigator, UIAdaptivePresentationControllerDelegate {
-    private var navigationController: UINavigationController?
-    private weak var presentedNavigationController: UINavigationController?
-    private var viewControllerFactory: ViewControllerFactory?
-
-    func configure(with factory: ViewControllerFactory) {
-        self.viewControllerFactory = factory
-    }
-
-    func setRootNavigationController(_ navigationController: UINavigationController) {
-        self.navigationController = navigationController
-        self.presentedNavigationController = navigationController
-    }
+@Observable @MainActor
+final class AppNavigator: Navigator {
+    var path: [NavigationRoute] = []
+    var modal: NavigationRoute?
+    var modalPath: [NavigationRoute] = []
+    var overlay: OverlayRoute?
 
     func navigate(_ action: NavigationAction) {
-        guard let presentedNavigationController else { return }
-
         switch action {
         case .modal(let route):
-            let vc = makeViewController(for: route)
-            let nav = UINavigationController(rootViewController: vc)
-            nav.isNavigationBarHidden = true
-            nav.modalPresentationStyle = .formSheet
-            nav.presentationController?.delegate = self
-            presentedNavigationController.present(nav, animated: true)
-            self.presentedNavigationController = nav
+            modalPath = []
+            modal = route
 
         case .push(let route):
-            let vc = makeViewController(for: route)
-            presentedNavigationController.pushViewController(vc, animated: true)
-
-        case .bottomSheet(let route):
-            let vc = makeViewController(for: route)
-            vc.modalPresentationStyle = .pageSheet
-            if let sheet = vc.sheetPresentationController {
-                sheet.detents = [.medium()]
-                sheet.prefersGrabberVisible = true
+            if modal != nil {
+                modalPath.append(route)
+            } else {
+                path.append(route)
             }
-            vc.presentationController?.delegate = self
-            presentedNavigationController.present(vc, animated: true)
 
-        case .presentHat(let hatSourceFrame, let hatImage, let genre):
-            guard let viewControllerFactory else {
-                fatalError("ViewControllerFactory not configured on AppNavigator")
+        case .overlay(let route):
+            withAnimation(.easeInOut(duration: 1.0)) {
+                overlay = route
             }
-            let vc = viewControllerFactory.makeDrawMovieViewController(
-                hatSourceFrame: hatSourceFrame,
-                hatImage: hatImage,
-                genre: genre
-            )
-            presentedNavigationController.present(vc, animated: true)
         }
     }
 
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        let presenting = presentationController.presentingViewController as? UINavigationController
-        self.presentedNavigationController = presenting ?? navigationController
+    func pop() {
+        if modal != nil {
+            guard !modalPath.isEmpty else { return }
+            modalPath.removeLast()
+        } else {
+            guard !path.isEmpty else { return }
+            path.removeLast()
+        }
     }
 
-    func dismiss(completion: (() -> Void)? = nil) {
-        guard let presentedNavigationController else {
-            return
-        }
-
-        let presenting = presentedNavigationController.presentingViewController as? UINavigationController
-
-        presentedNavigationController.dismiss(animated: true) { [weak self] in
-            self?.presentedNavigationController = presenting ?? self?.navigationController
+    func dismiss(completion: (() -> Void)?) {
+        if overlay != nil {
+            withAnimation(.easeInOut(duration: 0.5)) {
+                overlay = nil
+            } completion: {
+                completion?()
+            }
+        } else if modal != nil {
+            modal = nil
+            modalPath = []
             completion?()
-        }
-    }
-
-    private func makeViewController(for route: NavigationRoute) -> UIViewController {
-        guard let viewControllerFactory else {
-            fatalError("ViewControllerFactory not configured on AppNavigator")
-        }
-
-        switch route {
-        case .addMovie:
-            return viewControllerFactory.makeAddMovieViewController()
-
-        case .movieDetails(let movieId):
-            return viewControllerFactory.makeMovieDetailsViewController(movieId: movieId)
-
-        case .movieDetailsPreloaded(let movie):
-            return viewControllerFactory.makeMovieDetailsViewController(movie: movie)
-
-        case .genrePicker(let onGenreSelected):
-            return viewControllerFactory.makeGenrePickerViewController(
-                onGenreSelected: onGenreSelected
-            )
-
-        case .seeAllHat:
-            return viewControllerFactory.makeSeeAllHatViewController()
         }
     }
 }

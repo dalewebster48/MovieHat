@@ -1,97 +1,60 @@
-import UIKit
+import SwiftUI
 
+/// "Stage & crimson": cream ground, ink type, dark stage panels lit by warm spotlights.
+/// The design is light-only, so the app pins `.preferredColorScheme(.light)` at the root.
 enum Theme {
 
     // MARK: - Brand
 
-    static var primaryAccent: UIColor {
-        UIColor(red: 1, green: 0.627, blue: 0.039, alpha: 1)
-    }
-
-    static var secondaryAccent: UIColor { .systemTeal }
-
-    static var primaryAccentBackground: UIColor {
-        UIColor { traits in
-            UIColor(
-                red: 1, green: 0.627, blue: 0.039,
-                alpha: traits.userInterfaceStyle == .dark ? 0.15 : 0.08
-            )
-        }
-    }
-
-    static var secondaryAccentBackground: UIColor {
-        UIColor { traits in
-            UIColor.systemTeal
-                .resolvedColor(with: traits)
-                .withAlphaComponent(traits.userInterfaceStyle == .dark ? 0.15 : 0.08)
-        }
-    }
+    static var primaryAccent: Color { Color(hex: 0xC41E3A) }
+    static var secondaryAccent: Color { Color(hex: 0xE9B8B0) }
 
     // MARK: - Backgrounds
 
-    static var screenBackground: UIColor {
-        UIColor { traits in
-            traits.userInterfaceStyle == .dark
-                ? UIColor(red: 0.11, green: 0.11, blue: 0.12, alpha: 1)
-                : UIColor(red: 0.976, green: 0.965, blue: 0.945, alpha: 1)
-        }
-    }
-
-    static var secondaryBackground: UIColor { .secondarySystemBackground }
+    static var screenBackground: Color { Color(hex: 0xFBF4F1) }
+    static var surface: Color { .white }
+    static var stage: Color { Color(hex: 0x1C1514) }
+    static var stageDeep: Color { Color(hex: 0x120D0C) }
+    static var posterPlaceholder: Color { Color(hex: 0x2B2220) }
 
     // MARK: - Text
 
-    static var primaryText: UIColor { .label }
-    static var secondaryText: UIColor { .secondaryLabel }
-    static var invertedText: UIColor { .white }
+    static var primaryText: Color { Color(hex: 0x1C1514) }
+    static var secondaryText: Color { Color(hex: 0x6A5854) }
+    static var invertedText: Color { Color(hex: 0xFBF4F1) }
+    static var mutedInvertedText: Color { Color(hex: 0xCDBDB7) }
+    static var eyebrowOnStage: Color { secondaryAccent }
+    static var destructiveText: Color { Color(hex: 0xA3182F) }
 
     // MARK: - Components
 
-    static var iconCircleBackground: UIColor {
-        UIColor { traits in
-            traits.userInterfaceStyle == .dark
-                ? UIColor.white.withAlphaComponent(0.15)
-                : UIColor.white.withAlphaComponent(0.8)
-        }
-    }
-
-    static var posterPlaceholder: UIColor { .systemGray4 }
-    static var searchResultPosterBackground: UIColor { .systemGray5 }
-    static var ratingText: UIColor { .systemYellow }
-    static var badgeBackground: UIColor { .secondarySystemBackground }
-    static var badgeText: UIColor { .secondaryLabel }
+    static var border: Color { Color(hex: 0xE3D2CB) }
+    static var divider: Color { Color(hex: 0xEDDDD6) }
+    static var dashedBorder: Color { Color(hex: 0xD9C3BA) }
+    static var badgeBackground: Color { Color(hex: 0xF1E1DA) }
+    static var badgeText: Color { secondaryText }
+    static var overlayButtonBackground: Color { invertedText.opacity(0.92) }
+    static var overlayButtonOnStage: Color { invertedText.opacity(0.12) }
+    static var outlineOnStage: Color { invertedText.opacity(0.35) }
 
     // MARK: - Buttons
 
-    static var primaryButton: UIColor { primaryAccent }
+    static var primaryButton: Color { primaryAccent }
+    static var primaryButtonText: Color { .white }
+    static var selectedChip: Color { primaryText }
+    static var selectedChipText: Color { invertedText }
 
-    static var secondaryButton: UIColor {
-        UIColor.white.withAlphaComponent(0.9)
+    // MARK: - Spotlights
+
+    static var spotlight: Color { Color(red: 1, green: 238 / 255, blue: 220 / 255) }
+}
+
+private extension Color {
+    init(hex: UInt32) {
+        self.init(
+            red: Double((hex >> 16) & 0xFF) / 255,
+            green: Double((hex >> 8) & 0xFF) / 255,
+            blue: Double(hex & 0xFF) / 255
+        )
     }
-
-    static var destructiveButton: UIColor {
-        .systemRed.withAlphaComponent(0.7)
-    }
-
-    static var buttonText: UIColor { .white }
-
-    // MARK: - Poster Gradient
-
-    static var posterGradient: UIColor { .systemBackground }
-
-    // MARK: - Draw Movie
-
-    static var dimmingOverlay: UIColor {
-        UIColor.black.withAlphaComponent(0.88)
-    }
-
-    static var drawMoviePosterPlaceholder: UIColor {
-        UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
-    }
-
-    static var spotlight: UIColor { .white }
-
-    // MARK: - Search Field
-
-    static var searchFieldBackground: UIColor { .secondarySystemBackground }
 }

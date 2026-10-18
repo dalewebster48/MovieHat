@@ -1,37 +1,39 @@
 import Foundation
 
+struct MovieCredit: Identifiable, Hashable {
+    var id: String { label }
+    let label: String
+    let names: String
+}
+
 struct MovieDetailModel {
     let title: String
     let posterURL: URL?
-    let metadata: String
     let rating: String?
+    let metadata: String
     let plot: String?
-    let directors: String?
-    let writers: String?
-    let stars: String?
+    let credits: [MovieCredit]
 
     init(movie: Movie) {
         self.title = movie.title
         self.posterURL = movie.posterURL
+        self.rating = movie.aggregateRating.flatMap { $0 > 0 ? String(format: "%.1f", $0) : nil }
         self.metadata = Self.formatMetadata(movie)
-        self.rating = Self.formatRating(movie)
         self.plot = movie.plot
-        self.directors = Self.formatCreditLine(label: "Directors", names: movie.directors)
-        self.writers = Self.formatCreditLine(label: "Writers", names: movie.writers)
-        self.stars = Self.formatCreditLine(label: "Stars", names: movie.stars)
+        self.credits = [
+            Self.credit(singular: "Director", plural: "Directors", names: movie.directors),
+            Self.credit(singular: "Writer", plural: "Writers", names: movie.writers),
+            Self.credit(singular: "Star", plural: "Stars", names: movie.stars)
+        ].compactMap { $0 }
     }
 
-    private static func formatMetadata(_ movie: Movie) -> String {
+    static func formatMetadata(_ movie: Movie) -> String {
         var parts: [String] = []
         if let year = movie.year { parts.append("\(year)") }
-        if let runtime = movie.runtimeSeconds {
+        if let runtime = movie.runtimeSeconds, runtime > 0 {
             let hours = runtime / 3600
             let minutes = (runtime % 3600) / 60
-            if hours > 0 {
-                parts.append("\(hours)h \(minutes)m")
-            } else {
-                parts.append("\(minutes)m")
-            }
+            parts.append(hours > 0 ? "\(hours)h \(minutes)m" : "\(minutes)m")
         }
         if !movie.genres.isEmpty {
             parts.append(movie.genres.joined(separator: ", "))
@@ -39,26 +41,15 @@ struct MovieDetailModel {
         return parts.joined(separator: " · ")
     }
 
-    private static func formatRating(_ movie: Movie) -> String? {
-        guard let aggregateRating = movie.aggregateRating else { return nil }
-        var text = String(format: "★ %.1f", aggregateRating)
-        if let votes = movie.voteCount {
-            text += " (\(formatVoteCount(votes)) votes)"
-        }
-        return text
-    }
-
-    private static func formatVoteCount(_ count: Int) -> String {
-        if count >= 1_000_000 {
-            return String(format: "%.1fM", Double(count) / 1_000_000)
-        } else if count >= 1_000 {
-            return String(format: "%.1fK", Double(count) / 1_000)
-        }
-        return "\(count)"
-    }
-
-    private static func formatCreditLine(label: String, names: [String]) -> String? {
+    private static func credit(
+        singular: String,
+        plural: String,
+        names: [String]
+    ) -> MovieCredit? {
         guard !names.isEmpty else { return nil }
-        return "\(label): \(names.joined(separator: ", "))"
+        return MovieCredit(
+            label: names.count == 1 ? singular : plural,
+            names: names.joined(separator: ", ")
+        )
     }
 }
