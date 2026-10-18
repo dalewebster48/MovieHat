@@ -24,3 +24,6 @@ Carthage/Build/
 *.ipa
 *.dSYM.zip
 *.dSYM
+
+# Secrets
+Secrets.xcconfig

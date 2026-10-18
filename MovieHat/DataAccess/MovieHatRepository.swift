@@ -26,7 +26,7 @@ final class SQLiteMovieHatRepository: MovieHatRepository {
         let sql = """
             SELECT movies.id, movies.type, movies.title, movies.originalTitle,
                    movies.posterURL, movies.year, movies.endYear, movies.runtimeSeconds,
-                   movies.aggregateRating, movies.voteCount, movies.metacriticScore,
+                   movies.aggregateRating, movies.voteCount,
                    movies.plot, movies.directors, movies.writers, movies.stars,
                    movies.originCountries, movies.spokenLanguages,
                    GROUP_CONCAT(genres.name) AS genreNames
@@ -50,16 +50,15 @@ final class SQLiteMovieHatRepository: MovieHatRepository {
                 year: row[5] as? Int,
                 endYear: row[6] as? Int,
                 runtimeSeconds: row[7] as? Int,
-                genres: splitOrEmpty(17),
+                genres: splitOrEmpty(16),
                 aggregateRating: (row[8] as? Double).map { Float($0) },
                 voteCount: row[9] as? Int,
-                metacriticScore: row[10] as? Int,
-                plot: row[11] as? String,
-                directors: splitOrEmpty(12),
-                writers: splitOrEmpty(13),
-                stars: splitOrEmpty(14),
-                originCountries: splitOrEmpty(15),
-                spokenLanguages: splitOrEmpty(16)
+                plot: row[10] as? String,
+                directors: splitOrEmpty(11),
+                writers: splitOrEmpty(12),
+                stars: splitOrEmpty(13),
+                originCountries: splitOrEmpty(14),
+                spokenLanguages: splitOrEmpty(15)
             )
         }
     }
@@ -76,7 +75,6 @@ final class SQLiteMovieHatRepository: MovieHatRepository {
             MoviesTable.runtimeSeconds <- movie.runtimeSeconds,
             MoviesTable.aggregateRating <- movie.aggregateRating.map { Double($0) },
             MoviesTable.voteCount <- movie.voteCount,
-            MoviesTable.metacriticScore <- movie.metacriticScore,
             MoviesTable.plot <- movie.plot,
             MoviesTable.directors <- movie.directors.joined(separator: ","),
             MoviesTable.writers <- movie.writers.joined(separator: ","),

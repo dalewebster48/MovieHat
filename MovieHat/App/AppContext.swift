@@ -14,7 +14,8 @@ final class AppContext {
 
         let dataAccess = AppDataAccessContainer(
             networkClient: networkClient,
-            databaseProvider: databaseProvider
+            databaseProvider: databaseProvider,
+            tmdbAPIKey: Bundle.main.object(forInfoDictionaryKey: "TMDBAPIKey") as? String ?? ""
         )
         let services = ServicesContainer(dataAccess: dataAccess)
         let navigator = AppNavigator()

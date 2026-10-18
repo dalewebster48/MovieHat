@@ -45,9 +45,6 @@ struct MovieDetailModel {
         if let votes = movie.voteCount {
             text += " (\(formatVoteCount(votes)) votes)"
         }
-        if let metacritic = movie.metacriticScore {
-            text += "  ·  Metacritic: \(metacritic)"
-        }
         return text
     }
 

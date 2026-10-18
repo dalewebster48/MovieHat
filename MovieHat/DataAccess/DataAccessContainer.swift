@@ -17,7 +17,8 @@ final class AppDataAccessContainer: DataAccessContainer {
 
     init(
         networkClient: any NetworkClient,
-        databaseProvider: DatabaseProvider
+        databaseProvider: DatabaseProvider,
+        tmdbAPIKey: String
     ) {
         let genreRepository = SQLiteGenreRepository(databaseProvider: databaseProvider)
         self.genreRepository = genreRepository
@@ -25,7 +26,10 @@ final class AppDataAccessContainer: DataAccessContainer {
             databaseProvider: databaseProvider,
             genreRepository: genreRepository
         )
-        self.movieSearchRepository = IMDBMovieSearchRepository(networkClient: networkClient)
+        self.movieSearchRepository = TMDBMovieSearchRepository(
+            networkClient: networkClient,
+            apiKey: tmdbAPIKey
+        )
         self.imageCacheRepository = SQLiteImageCacheRepository(databaseProvider: databaseProvider)
         self.cacheRepository = FileCacheRepository()
     }

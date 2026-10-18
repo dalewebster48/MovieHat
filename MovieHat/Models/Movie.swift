@@ -12,7 +12,6 @@ struct Movie: Identifiable {
     let genres: [String]
     let aggregateRating: Float?
     let voteCount: Int?
-    let metacriticScore: Int?
     let plot: String?
     let directors: [String]
     let writers: [String]

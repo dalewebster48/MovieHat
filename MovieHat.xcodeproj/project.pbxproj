@@ -25,6 +25,7 @@
 		2D5C7F942F93A519009A96CB /* KnowBugs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = KnowBugs.md; sourceTree = "<group>"; };
 		2D963BB92F89AFA300C4B368 /* MovieHat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieHat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DB00002400000000000000A /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DC00001500000000000000A /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -76,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				2D5C7F942F93A519009A96CB /* KnowBugs.md */,
+				2DC00001500000000000000A /* Secrets.xcconfig */,
 				2D963BBB2F89AFA300C4B368 /* MovieHat */,
 				2DB00003400000000000000A /* Tests */,
 				2D963BBA2F89AFA300C4B368 /* Products */,
@@ -226,6 +228,7 @@
 /* Begin XCBuildConfiguration section */
 		2D963BCD2F89AFA400C4B368 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2DC00001500000000000000A /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -258,6 +261,7 @@
 		};
 		2D963BCE2F89AFA400C4B368 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2DC00001500000000000000A /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

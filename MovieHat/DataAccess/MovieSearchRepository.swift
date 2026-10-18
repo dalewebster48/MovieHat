@@ -5,73 +5,102 @@ protocol MovieSearchRepository: AnyObject {
     func getMovie(id: String) async throws -> Movie
 }
 
-// MARK: - IMDB Implementation
+// MARK: - TMDB Implementation
 
-final class IMDBMovieSearchRepository: MovieSearchRepository {
+final class TMDBMovieSearchRepository: MovieSearchRepository {
     private let networkClient: any NetworkClient
+    private let apiKey: String
 
-    init(networkClient: any NetworkClient) {
+    init(
+        networkClient: any NetworkClient,
+        apiKey: String
+    ) {
         self.networkClient = networkClient
+        self.apiKey = apiKey
     }
 
     func searchMovies(query: String) async throws -> [MovieSearchResult] {
-        let request = IMDBSearchRequest(query: query, limit: 10)
-        let response: IMDBSearchResponse = try await networkClient.get(url: .imdbSearchTitles, query: request)
+        let request = TMDBSearchRequest(apiKey: apiKey, query: query)
+        let response: TMDBSearchResponse = try await networkClient.get(url: .tmdbSearchMovie, query: request)
 
-        return response.titles.compactMap { title in
-            guard title.type == "movie" else { return nil }
-            
-            return MovieSearchResult(
-                id: title.id,
-                title: title.primaryTitle,
-                year: title.startYear,
-                aggregateRating: title.rating?.aggregateRating,
-                posterURL: title.primaryImage?.url.flatMap { URL(string: $0) }
+        return response.results.prefix(10).map { result in
+            MovieSearchResult(
+                id: String(result.id),
+                title: result.title,
+                year: Self.year(from: result.releaseDate),
+                aggregateRating: result.voteAverage,
+                posterURL: result.posterPath.map { URL.tmdbPoster(path: $0) }
             )
         }
     }
 
     func getMovie(id: String) async throws -> Movie {
-        let response: IMDBTitleResponse = try await networkClient.get(url: .imdbTitle(id: id))
+        let request = TMDBMovieRequest(apiKey: apiKey, appendToResponse: "credits")
+        let response: TMDBMovieResponse = try await networkClient.get(url: .tmdbMovie(id: id), query: request)
+        let crew = response.credits?.crew ?? []
+        let cast = response.credits?.cast ?? []
 
         return Movie(
-            id: response.id,
-            type: response.type,
-            title: response.primaryTitle,
+            id: String(response.id),
+            type: "movie",
+            title: response.title,
             originalTitle: response.originalTitle,
-            posterURL: response.primaryImage?.url.flatMap { URL(string: $0) },
-            year: response.startYear,
-            endYear: response.endYear,
-            runtimeSeconds: response.runtimeSeconds,
-            genres: response.genres ?? [],
-            aggregateRating: response.rating?.aggregateRating,
-            voteCount: response.rating?.voteCount,
-            metacriticScore: response.metacritic?.score,
-            plot: response.plot,
-            directors: response.directors?.compactMap { $0.displayName } ?? [],
-            writers: response.writers?.compactMap { $0.displayName } ?? [],
-            stars: response.stars?.compactMap { $0.displayName } ?? [],
-            originCountries: response.originCountries?.compactMap { $0.name } ?? [],
-            spokenLanguages: response.spokenLanguages?.compactMap { $0.name } ?? []
+            posterURL: response.posterPath.map { URL.tmdbPoster(path: $0) },
+            year: Self.year(from: response.releaseDate),
+            endYear: nil,
+            runtimeSeconds: response.runtime.map { $0 * 60 },
+            genres: response.genres?.map { $0.name } ?? [],
+            aggregateRating: response.voteAverage,
+            voteCount: response.voteCount,
+            plot: response.overview,
+            directors: crew.filter { $0.job == "Director" }.map { $0.name },
+            writers: crew.filter { $0.job == "Screenplay" || $0.job == "Writer" }.map { $0.name },
+            stars: cast.sorted { ($0.order ?? .max) < ($1.order ?? .max) }.prefix(3).map { $0.name },
+            originCountries: response.productionCountries?.compactMap { $0.name } ?? [],
+            spokenLanguages: response.spokenLanguages?.compactMap { $0.englishName } ?? []
         )
     }
-}
 
-// MARK: - IMDB URL Endpoints
-
-private extension URL {
-    static var imdbBase: URL { URL(string: "https://api.imdbapi.dev")! }
-    static var imdbSearch: URL { imdbBase.appending(path: "search") }
-    static var imdbSearchTitles: URL { imdbSearch.appending(path: "titles") }
-
-    static func imdbTitle(id: String) -> URL {
-        imdbBase.appending(path: "titles").appending(path: id)
+    /// TMDB dates are "YYYY-MM-DD", or an empty string when unknown.
+    private static func year(from releaseDate: String?) -> Int? {
+        releaseDate.flatMap { Int($0.prefix(4)) }
     }
 }
 
-// MARK: - IMDB Request
+// MARK: - TMDB URL Endpoints
 
-private struct IMDBSearchRequest: Encodable {
+private extension URL {
+    static var tmdbBase: URL { URL(string: "https://api.themoviedb.org/3")! }
+    static var tmdbSearchMovie: URL { tmdbBase.appending(path: "search").appending(path: "movie") }
+    static var tmdbImageBase: URL { URL(string: "https://image.tmdb.org/t/p/w500")! }
+
+    static func tmdbMovie(id: String) -> URL {
+        tmdbBase.appending(path: "movie").appending(path: id)
+    }
+
+    static func tmdbPoster(path: String) -> URL {
+        tmdbImageBase.appending(path: path)
+    }
+}
+
+// MARK: - TMDB Requests
+
+private struct TMDBSearchRequest: Encodable {
+    let apiKey: String
     let query: String
-    let limit: Int
+
+    enum CodingKeys: String, CodingKey {
+        case apiKey = "api_key"
+        case query
+    }
+}
+
+private struct TMDBMovieRequest: Encodable {
+    let apiKey: String
+    let appendToResponse: String
+
+    enum CodingKeys: String, CodingKey {
+        case apiKey = "api_key"
+        case appendToResponse = "append_to_response"
+    }
 }
