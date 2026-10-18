@@ -40,3 +40,4 @@
 - Home screen does not refresh when dismissing presented controllers
 - The 'in hat' state does not update when tapping buttons in movie details view
 - Navigation sometimes breaks
+
