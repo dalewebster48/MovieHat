@@ -1,6 +1,15 @@
 {
-  "originHash" : "42598adf0e546dd7490b40b2fd0f5298dee9c098f71dcdbfcb5cc4c07573f374",
+  "originHash" : "be53bdfae02baa40df526929f6428524384241733c5002f42ff8c96d569b2220",
   "pins" : [
+    {
+      "identity" : "apprepokit",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:dalewebster48/AppRepoKit.git",
+      "state" : {
+        "revision" : "d2ead6e07f172cec44805174134dcbcc174af341",
+        "version" : "1.0.0"
+      }
+    },
     {
       "identity" : "sqlite.swift",
       "kind" : "remoteSourceControl",

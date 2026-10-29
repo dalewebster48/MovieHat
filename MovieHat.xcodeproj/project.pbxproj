@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2D5C7F952F93A521009A96CB /* KnowBugs.md in Sources */ = {isa = PBXBuildFile; fileRef = 2D5C7F942F93A519009A96CB /* KnowBugs.md */; };
 		2DA00001300000000000000A /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 2DA00002300000000000000A /* SQLite */; };
+		2DA00001400000000000000A /* AppRepoUpdates in Frameworks */ = {isa = PBXBuildFile; productRef = 2DA00002400000000000000A /* AppRepoUpdates */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DA00001300000000000000A /* SQLite in Frameworks */,
+				2DA00001400000000000000A /* AppRepoUpdates in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +116,7 @@
 			name = MovieHat;
 			packageProductDependencies = (
 				2DA00002300000000000000A /* SQLite */,
+				2DA00002400000000000000A /* AppRepoUpdates */,
 			);
 			productName = MovieHat;
 			productReference = 2D963BB92F89AFA300C4B368 /* MovieHat.app */;
@@ -170,6 +173,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				2DA00003300000000000000A /* XCRemoteSwiftPackageReference "SQLite" */,
+				2DA00003400000000000000A /* XCRemoteSwiftPackageReference "AppRepoKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2D963BBA2F89AFA300C4B368 /* Products */;
@@ -237,6 +241,7 @@
 				DEVELOPMENT_TEAM = TXS69XU8F2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MovieHat/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Checks the App Repo server on your home network for newer builds.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -270,6 +275,7 @@
 				DEVELOPMENT_TEAM = TXS69XU8F2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MovieHat/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Checks the App Repo server on your home network for newer builds.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -496,6 +502,14 @@
 				minimumVersion = 0.15.3;
 			};
 		};
+		2DA00003400000000000000A /* XCRemoteSwiftPackageReference "AppRepoKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:dalewebster48/AppRepoKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -503,6 +517,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2DA00003300000000000000A /* XCRemoteSwiftPackageReference "SQLite" */;
 			productName = SQLite;
+		};
+		2DA00002400000000000000A /* AppRepoUpdates */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2DA00003400000000000000A /* XCRemoteSwiftPackageReference "AppRepoKit" */;
+			productName = AppRepoUpdates;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -1,3 +1,4 @@
+import AppRepoUpdates
 import SwiftUI
 
 @main
@@ -11,6 +12,7 @@ struct MovieHatApp: App {
                 viewFactory: appContext.viewFactory,
                 homeViewModel: appContext.homeViewModel
             )
+            .appRepoUpdates()
         }
     }
 }
